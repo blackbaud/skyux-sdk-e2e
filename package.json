@@ -1,0 +1,37 @@
+{
+  "name": "@blackbaud/skyux-visual",
+  "version": "1.0.0",
+  "description": "Provides a node.js library for running e2e visual tests.",
+  "main": "dist/bundles/skyux-visual.umd.js",
+  "module": "index.ts",
+  "engines": {
+    "node": ">=6.14.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blackbaud/skyux-visual.git"
+  },
+  "scripts": {
+    "ci": "npm run test:ci && npm run build",
+    "test": "npm run lint && npm run test:unit",
+    "test:ci": "npm run test:unit:ci",
+    "test:unit": "npm run test:unit:base -- config/karma/local.karma.conf.js",
+    "test:unit:ci": "npm run test:unit:base -- config/karma/ci.karma.conf.js",
+    "test:unit:base": "node ./node_modules/karma/bin/karma start",
+    "pretest": "npm run lint",
+    "build": "rimraf dist && tsc && webpack --config config/webpack/webpack.prod.config.js",
+    "watch": "npm run test:unit -- --auto-watch --no-single-run",
+    "lint": "tslint 'src/**/*.ts'"
+  },
+  "keywords": [],
+  "author": "Blackbaud, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blackbaud/skyux-visual/issues"
+  },
+  "homepage": "https://github.com/blackbaud/skyux-visual#readme",
+  "dependencies": {
+    "pix-diff": "2.0.1"
+  },
+  "devDependencies": {}
+}
