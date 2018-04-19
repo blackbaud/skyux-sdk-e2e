@@ -33,18 +33,22 @@ function getComparator() {
 export abstract class SkyVisual {
   private static comparator: any;
 
-  public static compareScreenshot(config: SkyVisualCompareScreenshotConfig) {
+  public static compareScreenshot(screenshotName: string, config?: SkyVisualCompareScreenshotConfig) {
     if (!SkyVisual.comparator) {
       SkyVisual.comparator = getComparator();
     }
 
-    const selector = config.selector || 'body';
-    const subject = element(by.css(selector));
+    const defaults = {
+      selector: 'body'
+    };
+
+    const settings = Object.assign({}, defaults, config);
+    const subject = element(by.css(settings.selector));
 
     return SkyVisual.comparator
       .checkRegion(
         subject,
-        config.screenshotName,
+        screenshotName,
         {
           threshold: 0.02,
           thresholdType: PixDiff.THRESHOLD_PERCENT
@@ -65,7 +69,7 @@ export abstract class SkyVisual {
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
         if (error.message.indexOf('saving current image') > -1) {
-          logger.info(`[${config.screenshotName}]`, error.message);
+          logger.info(`[${screenshotName}]`, error.message);
           return Promise.resolve();
         }
 

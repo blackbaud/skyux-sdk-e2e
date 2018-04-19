@@ -1,52 +1,11 @@
 const path = require('path');
+const webpackMerge = require('webpack-merge');
+const common = require('./webpack-prod.config');
 
-function nodeExternals() {
-  return function (context, request, callback) {
-    const ignore = [
-      /@blackbaud\/skyux\-logger/,
-      /pix\-diff/,
-      /protractor/
-    ];
-
-    // Mark these modules as external.
-    // https://webpack.js.org/configuration/externals/#function
-    for (let i = 0, len = ignore.length; i < len; i++) {
-      if (ignore[i].test(request)) {
-        return callback(null, `commonjs ${request}`);
-      }
-    }
-
-    callback();
-  };
-}
-
-module.exports = {
+module.exports = webpackMerge(common, {
+  watch: false,
   mode: 'production',
-  entry: './index.ts',
-  target: 'node',
-  externals: [
-    nodeExternals()
-  ],
-  output: {
-    path: path.resolve(__dirname, '..', '..', 'dist', 'bundles'),
-    filename: 'skyux-visual.umd.js',
-    library: 'SkyVisual',
-    libraryTarget: 'umd'
-  },
-  resolve: {
-    extensions: ['.ts']
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        loader: 'ts-loader',
-        options: {
-          compilerOptions: {
-            declaration: false
-          }
-        }
-      }
-    ]
-  }
-};
+  // Disable sourcemaps for production:
+  // https://webpack.js.org/configuration/devtool/#production
+  devtool: undefined
+});
