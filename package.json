@@ -1,9 +1,9 @@
 {
   "name": "@blackbaud/skyux-visual",
-  "version": "1.0.0",
-  "description": "Provides a node.js library for running e2e visual tests.",
-  "main": "dist/bundles/skyux-visual.umd.js",
-  "module": "index.ts",
+  "version": "0.0.1",
+  "description": "Provides a Node.js library for running e2e visual tests",
+  "main": "bundles/skyux-visual.umd.js",
+  "module": "index.js",
   "engines": {
     "node": ">=6.14.1"
   },
@@ -18,8 +18,8 @@
     "test:unit": "npm run test:unit:base -- config/karma/local.karma.conf.js",
     "test:unit:ci": "npm run test:unit:base -- config/karma/ci.karma.conf.js",
     "test:unit:base": "node ./node_modules/karma/bin/karma start",
-    "pretest": "npm run lint",
-    "build": "rimraf dist && tsc && webpack --config config/webpack/webpack.prod.config.js",
+    "prepare": "node ./scripts/prepare-package",
+    "build": "npm run lint && rimraf dist && tsc && node_modules/.bin/webpack --config config/webpack/webpack-prod.config.js",
     "watch": "npm run test:unit -- --auto-watch --no-single-run",
     "lint": "tslint 'src/**/*.ts'"
   },
@@ -31,7 +31,18 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-visual#readme",
   "dependencies": {
-    "pix-diff": "2.0.1"
+    "@blackbaud/skyux-logger": "1.0.2",
+    "pix-diff": "2.0.1",
+    "protractor": "5.3.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jasmine": "2.8.6",
+    "@types/node": "9.6.5",
+    "rimraf": "2.6.2",
+    "ts-loader": "4.2.0",
+    "tslint": "5.9.1",
+    "typescript": "2.8.1",
+    "webpack": "4.6.0",
+    "webpack-cli": "2.0.14"
+  }
 }
