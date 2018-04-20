@@ -18,7 +18,8 @@ module.exports = function (config) {
       dir: '../../coverage/',
       reporters: [
         { type: 'json' },
-        { type: 'html' }
+        { type: 'html' },
+        { type: 'text-summary' }
       ],
       _onWriteReport: function (collector) {
         return remapIstanbul.remap(collector.getFinalCoverage());

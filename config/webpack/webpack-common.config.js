@@ -27,28 +27,5 @@ module.exports = {
   target: 'node',
   externals: [
     nodeExternals()
-  ],
-  output: {
-    path: path.resolve(__dirname, '..', '..', 'dist', 'bundles'),
-    filename: 'skyux-visual.umd.js',
-    library: 'SkyVisual',
-    libraryTarget: 'umd'
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
-    modules: [path.resolve(__dirname, '..', '..', 'src'), 'node_modules']
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        loader: 'ts-loader',
-        options: {
-          compilerOptions: {
-            declaration: false
-          }
-        }
-      }
-    ]
-  }
+  ]
 };

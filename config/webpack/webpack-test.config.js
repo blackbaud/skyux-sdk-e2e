@@ -1,9 +1,15 @@
 const path = require('path');
 const webpackMerge = require('webpack-merge');
-const common = require('./webpack-prod.config');
+const common = require('./webpack-common.config');
 
 module.exports = webpackMerge(common, {
   devtool: 'inline-source-map',
+
+  resolve: {
+    extensions: ['.ts', '.js'],
+    modules: [path.resolve(__dirname, '..', '..', 'src'), 'node_modules']
+  },
+
   module: {
     rules: [
       {
@@ -17,6 +23,15 @@ module.exports = webpackMerge(common, {
           emitErrors: true,
           failOnHint: true,
           resourcePath: 'src'
+        }
+      },
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          compilerOptions: {
+            declaration: false
+          }
         }
       },
       {
