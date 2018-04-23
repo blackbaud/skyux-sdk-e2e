@@ -21,8 +21,10 @@
       }
     ],
     "no-console": [false],
+    "no-empty": [false],
     "no-string-literal": false,
     "no-var-requires": false,
+    "only-arrow-functions": false,
     "quotemark": [
       true,
       "single",

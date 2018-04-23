@@ -1,8 +1,9 @@
 import { SkyVisualCompareScreenshotConfig } from './visual-compare-screenshot-config';
+import { SkyVisualCompareScreenshotResult } from './visual-compare-screenshot-result';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
-const { browser, by, element } = require('protractor');
+const protractor = require('protractor');
 
 const defaultPixDiffConfig = {
   basePath: 'screenshots-baseline-local',
@@ -14,14 +15,13 @@ const defaultPixDiffConfig = {
   width: 1000
 };
 
-function getComparator() {
+function getComparator(): any {
   let config: any;
-
-  if (browser.skyVisualConfig) {
+  if (protractor.browser.skyVisualConfig) {
     config = Object.assign(
       {},
       defaultPixDiffConfig,
-      browser.skyVisualConfig.compareScreenshot
+      protractor.browser.skyVisualConfig.compareScreenshot
     );
   } else {
     config = defaultPixDiffConfig;
@@ -30,10 +30,17 @@ function getComparator() {
   return new PixDiff(config);
 }
 
+function queryElement(selector: string): any {
+  return protractor.element(protractor.by.css(selector));
+}
+
 export abstract class SkyVisual {
   private static comparator: any;
 
-  public static compareScreenshot(screenshotName: string, config?: SkyVisualCompareScreenshotConfig) {
+  public static compareScreenshot(
+    screenshotName: string,
+    config?: SkyVisualCompareScreenshotConfig
+  ): Promise<SkyVisualCompareScreenshotResult> {
     if (!SkyVisual.comparator) {
       SkyVisual.comparator = getComparator();
     }
@@ -43,7 +50,7 @@ export abstract class SkyVisual {
     };
 
     const settings = Object.assign({}, defaults, config);
-    const subject = element(by.css(settings.selector));
+    const subject = queryElement(settings.selector);
 
     return SkyVisual.comparator
       .checkRegion(
@@ -57,14 +64,14 @@ export abstract class SkyVisual {
       .then((results: any) => {
         const code = results.code;
         const mismatchPercentage = (results.differences / results.dimension * 100).toFixed(2);
-        const message = `Screenshots have mismatch of ${mismatchPercentage} percent!`;
+        const message = `Screenshots for "${screenshotName}" have mismatch of ${mismatchPercentage} percent!`;
 
         const isSimilar = (
           code === PixDiff.RESULT_SIMILAR ||
           code === PixDiff.RESULT_IDENTICAL
         );
 
-        expect(isSimilar).toEqual(true, message);
+        return { isSimilar, message } as SkyVisualCompareScreenshotResult;
       })
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.

@@ -12,16 +12,8 @@
     "url": "https://github.com/blackbaud/skyux-visual.git"
   },
   "scripts": {
-    "ci": "npm run test:ci && npm run build",
-    "test": "npm run lint && npm run test:unit",
-    "test:ci": "npm run test:unit:ci",
-    "test:unit": "npm run test:unit:base -- config/karma/karma.conf.js",
-    "test:unit:ci": "npm run test:unit:base -- config/karma/karma.conf.js",
-    "test:unit:base": "node ./node_modules/karma/bin/karma start",
-    "prepare": "node ./scripts/prepare-package",
-    "build": "npm run lint && rimraf dist && tsc && node_modules/.bin/webpack --config config/webpack/webpack-prod.config.js",
-    "watch": "npm run test:unit -- --auto-watch --no-single-run",
-    "lint": "tslint 'src/**/*.ts'"
+    "lint": "tslint 'src/**/*.ts'",
+    "test": "rimraf dist && tsc --outDir dist && istanbul cover --report=html --report=text-summary ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json"
   },
   "keywords": [],
   "author": "Blackbaud, Inc.",
@@ -36,26 +28,16 @@
     "protractor": "5.3.1"
   },
   "devDependencies": {
+    "@types/core-js": "0.9.46",
     "@types/jasmine": "2.8.6",
-    "@types/node": "9.6.5",
-    "istanbul-instrumenter-loader": "3.0.1",
+    "@types/node": "9.6.6",
+    "core-js": "2.5.5",
+    "istanbul": "0.4.5",
     "jasmine": "3.1.0",
-    "karma": "2.0.0",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-coverage": "1.1.1",
-    "karma-jasmine": "1.1.1",
-    "karma-mocha-reporter": "2.2.5",
-    "karma-sourcemap-loader": "0.3.7",
-    "karma-webpack": "3.0.0",
-    "remap-istanbul": "0.11.0",
+    "mock-require": "3.0.2",
+    "rewiremock": "3.7.1",
     "rimraf": "2.6.2",
-    "source-map-inline-loader": "1.0.0",
-    "ts-loader": "4.2.0",
     "tslint": "5.9.1",
-    "tslint-loader": "3.6.0",
-    "typescript": "2.8.1",
-    "webpack": "4.6.0",
-    "webpack-cli": "2.0.14",
-    "webpack-merge": "4.1.2"
+    "typescript": "2.8.1"
   }
 }
