@@ -1,36 +1,34 @@
-import { SkyVisualCompareScreenshotConfig } from './visual-compare-screenshot-config';
-import { SkyVisualCompareScreenshotResult } from './visual-compare-screenshot-result';
+import {
+  SkyVisualCompareScreenshotConfig,
+  SkyVisualCompareScreenshotResult
+} from './types';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
 const protractor = require('protractor');
 
-const defaultPixDiffConfig = {
-  basePath: 'screenshots-baseline-local',
-  baseline: true,
-  createdPath: 'screenshots-created-local',
-  createdPathDiff: 'screenshots-created-diff-local',
-  diffPath: 'screenshots-diff-local',
-  height: 800,
-  width: 1000
-};
+function createComparator(): any {
+  const defaults = {
+    basePath: 'screenshots-baseline-local',
+    baseline: true,
+    createdPath: 'screenshots-created-local',
+    createdPathDiff: 'screenshots-created-diff-local',
+    diffPath: 'screenshots-diff-local',
+    height: 800,
+    width: 1000
+  };
 
-function getComparator(): any {
-  let config: any;
-  if (protractor.browser.skyVisualConfig) {
-    config = Object.assign(
-      {},
-      defaultPixDiffConfig,
-      protractor.browser.skyVisualConfig.compareScreenshot
-    );
-  } else {
-    config = defaultPixDiffConfig;
-  }
+  const config = Object.assign(
+    {},
+    defaults,
+    protractor.browser.skyVisualConfig &&
+    protractor.browser.skyVisualConfig.compareScreenshot
+  );
 
   return new PixDiff(config);
 }
 
-function queryElement(selector: string): any {
+function queryDomElement(selector: string): any {
   return protractor.element(protractor.by.css(selector));
 }
 
@@ -42,15 +40,15 @@ export abstract class SkyVisual {
     config?: SkyVisualCompareScreenshotConfig
   ): Promise<SkyVisualCompareScreenshotResult> {
     if (!SkyVisual.comparator) {
-      SkyVisual.comparator = getComparator();
+      SkyVisual.comparator = createComparator();
     }
 
-    const defaults = {
+    const defaults: SkyVisualCompareScreenshotConfig = {
       selector: 'body'
     };
 
     const settings = Object.assign({}, defaults, config);
-    const subject = queryElement(settings.selector);
+    const subject = queryDomElement(settings.selector);
 
     return SkyVisual.comparator
       .checkRegion(
