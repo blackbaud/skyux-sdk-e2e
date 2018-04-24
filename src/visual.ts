@@ -3,6 +3,9 @@ import {
   SkyVisualCompareScreenshotResult
 } from './types';
 
+import { SkyVisualMatchers } from './visual-matchers';
+
+const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
 const protractor = require('protractor');
 
@@ -27,19 +30,14 @@ function createComparator(): any {
   return new PixDiff(config);
 }
 
-function queryDomElement(selector: string): any {
-  return protractor.element(protractor.by.css(selector));
-}
-
 export abstract class SkyVisual {
-  private static comparator: any;
-
   public static compareScreenshot(
     screenshotName: string,
     config?: SkyVisualCompareScreenshotConfig
   ): Promise<SkyVisualCompareScreenshotResult> {
-    if (!SkyVisual.comparator) {
-      SkyVisual.comparator = createComparator();
+
+    if (!protractor.browser.pixDiff) {
+      protractor.browser.pixDiff = createComparator();
     }
 
     const defaults: SkyVisualCompareScreenshotConfig = {
@@ -47,9 +45,9 @@ export abstract class SkyVisual {
     };
 
     const settings = Object.assign({}, defaults, config);
-    const subject = queryDomElement(settings.selector);
+    const subject = protractor.element(protractor.by.css(settings.selector));
 
-    return SkyVisual.comparator
+    return protractor.browser.pixDiff
       .checkRegion(
         subject,
         screenshotName,
@@ -61,29 +59,33 @@ export abstract class SkyVisual {
       .then((results: any) => {
         const code = results.code;
         const mismatchPercentage = (results.differences / results.dimension * 100).toFixed(2);
-        const message = `Screenshots for "${screenshotName}" have mismatch of ${mismatchPercentage} percent!`;
+        const message = `Screenshots have mismatch of ${mismatchPercentage} percent!`;
 
         const isSimilar = (
           code === PixDiff.RESULT_SIMILAR ||
           code === PixDiff.RESULT_IDENTICAL
         );
 
-        return {
-          isSimilar,
-          message
-        } as SkyVisualCompareScreenshotResult;
+        return { isSimilar, message };
       })
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
         if (error.message.indexOf('saving current image') > -1) {
-          const message = `[${screenshotName}] ${error.message}`;
-          return Promise.resolve({
-            isSimilar: true,
-            message
+          setTimeout(() => {
+            logger.info(`[${screenshotName}] ${error.message}`);
           });
+
+          return Promise.resolve({ isSimilar: true, message: '' });
         }
 
         throw error;
       });
+  }
+
+  public static loadMatchers() {
+    const globalRef: any = global;
+    globalRef.beforeEach(() => {
+      globalRef.jasmine.addMatchers(SkyVisualMatchers);
+    });
   }
 }
