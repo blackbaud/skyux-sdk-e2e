@@ -14,7 +14,6 @@ export default {
     uglify()
   ],
   external: [
-    '@blackbaud/skyux-logger',
     'pix-diff',
     'protractor'
   ]

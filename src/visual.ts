@@ -3,7 +3,6 @@ import {
   SkyVisualCompareScreenshotResult
 } from './types';
 
-const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
 const protractor = require('protractor');
 
@@ -69,13 +68,19 @@ export abstract class SkyVisual {
           code === PixDiff.RESULT_IDENTICAL
         );
 
-        return { isSimilar, message } as SkyVisualCompareScreenshotResult;
+        return {
+          isSimilar,
+          message
+        } as SkyVisualCompareScreenshotResult;
       })
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
         if (error.message.indexOf('saving current image') > -1) {
-          logger.info(`[${screenshotName}]`, error.message);
-          return Promise.resolve();
+          const message = `[${screenshotName}] ${error.message}`;
+          return Promise.resolve({
+            isSimilar: true,
+            message
+          });
         }
 
         throw error;
