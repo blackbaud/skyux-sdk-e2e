@@ -13,7 +13,8 @@
   },
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
-    "test": "rimraf dist && tsc --outDir dist && istanbul cover --report=html --report=text-summary ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json"
+    "remap": "node_modules/.bin/remap-istanbul -i ./coverage/coverage-final.json -t html -o ./coverage",
+    "test": "npm run lint && rimraf dist && tsc --project tsconfig.json && npm run build && istanbul cover --report=html --report=json --report=text-summary -x **/*.spec.js -x **/fixtures/*.js ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json && npm run remap"
   },
   "keywords": [],
   "author": "Blackbaud, Inc.",
@@ -28,10 +29,8 @@
     "protractor": "5.3.1"
   },
   "devDependencies": {
-    "@types/core-js": "0.9.46",
     "@types/jasmine": "2.8.6",
     "@types/node": "9.6.6",
-    "core-js": "2.5.5",
     "istanbul": "0.4.5",
     "jasmine": "3.1.0",
     "mock-require": "3.0.2",
