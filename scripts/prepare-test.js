@@ -4,11 +4,11 @@ const rimraf = require('rimraf');
 
 const dest = path.resolve(process.cwd(), 'node_modules', '@blackbaud', 'skyux-visual');
 
-rimraf(dest, () => {
-  fs.ensureDirSync(dest);
+rimraf.sync(dest);
 
-  fs.copySync(
-    path.resolve(process.cwd(), 'dist'),
-    dest
-  );
-});
+fs.ensureDirSync(dest);
+
+fs.copySync(
+  path.resolve(process.cwd(), 'dist'),
+  dest
+);

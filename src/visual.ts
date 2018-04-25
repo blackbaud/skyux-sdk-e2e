@@ -3,7 +3,8 @@ import {
   SkyVisualCompareScreenshotResult
 } from './types';
 
-import { SkyVisualMatchers } from './matchers';
+// Apply jasmine matchers when this file is imported into a spec.
+import './matchers';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
@@ -80,12 +81,5 @@ export abstract class SkyVisual {
 
         throw error;
       });
-  }
-
-  public static loadMatchers() {
-    const globalRef: any = global;
-    globalRef.beforeEach(() => {
-      globalRef.jasmine.addMatchers(SkyVisualMatchers);
-    });
   }
 }

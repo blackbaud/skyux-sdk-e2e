@@ -12,8 +12,8 @@
     "sourceMap": true,
     "target": "es5"
   },
-  "files": [
-    "./index.ts"
+  "include": [
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

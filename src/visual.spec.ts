@@ -14,8 +14,6 @@ import {
 } from '@blackbaud/skyux-visual';
 
 describe('SkyVisual', () => {
-  SkyVisual.loadMatchers();
-
   beforeEach(() => {
     rewiremock.getMock('protractor').with({
       browser: {
