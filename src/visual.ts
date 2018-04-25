@@ -36,7 +36,6 @@ export abstract class SkyVisual {
     screenshotName: string,
     config?: SkyVisualCompareScreenshotConfig
   ): Promise<SkyVisualCompareScreenshotResult> {
-
     if (!protractor.browser.pixDiff) {
       protractor.browser.pixDiff = createComparator();
     }

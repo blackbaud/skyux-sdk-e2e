@@ -11,7 +11,7 @@ rewiremock('pix-diff').with(MockPixDiffFactory);
 
 import {
   SkyVisual
-} from '@blackbaud/skyux-visual';
+} from './visual';
 
 describe('SkyVisual', () => {
   beforeEach(() => {
