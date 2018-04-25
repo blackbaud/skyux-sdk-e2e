@@ -3,7 +3,7 @@ import {
   SkyVisualCompareScreenshotResult
 } from './types';
 
-import { SkyVisualMatchers } from './visual-matchers';
+import { SkyVisualMatchers } from './matchers';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');

@@ -1,5 +1,5 @@
 // tslint:disable-next-line
-/// <reference path="./types/visual-matchers.d.ts"/>
+/// <reference path="./matchers-declaration.ts"/>
 
 import CustomMatcherFactories = jasmine.CustomMatcherFactories;
 

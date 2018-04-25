@@ -9,9 +9,13 @@ rewiremock.enable();
 (rewiremock('protractor').with({}) as any).dynamic();
 rewiremock('pix-diff').with(MockPixDiffFactory);
 
-import { SkyVisual } from './visual';
+import {
+  SkyVisual
+} from '@blackbaud/skyux-visual';
 
 describe('SkyVisual', () => {
+  SkyVisual.loadMatchers();
+
   beforeEach(() => {
     rewiremock.getMock('protractor').with({
       browser: {
@@ -37,8 +41,13 @@ describe('SkyVisual', () => {
   it('should compare exact screenshots', (done) => {
     SkyVisual.compareScreenshot('foo').then((result: any) => {
       expect(result.isSimilar).toEqual(true);
-      expect(result.message).toEqual('Screenshots for "foo" have mismatch of 100.00 percent!');
+      expect(result.message).toEqual('Screenshots have mismatch of 100.00 percent!');
       done();
     });
+  });
+
+  it('should allow custom matchers', () => {
+    expect({ isSimilar: true, message: '' }).toMatchBaseline();
+    expect({ isSimilar: false, message: '' }).not.toMatchBaseline();
   });
 });

@@ -12,10 +12,10 @@
     "url": "https://github.com/blackbaud/skyux-visual.git"
   },
   "scripts": {
-    "build": "rimraf dist && tsc --project tsconfig.json && rollup -c rollup.config.js",
+    "build": "rimraf dist && tsc --project tsconfig.json && rollup -c rollup.config.js && node ./scripts/prepare-package.js",
     "lint": "tslint 'src/**/*.ts'",
     "remap": "node_modules/.bin/remap-istanbul -i ./coverage/coverage-final.json -t html -o ./coverage",
-    "test": "npm run lint && rimraf dist && tsc --project tsconfig-test.json && istanbul cover --report=html --report=json --report=text-summary -x **/*.spec.js -x **/fixtures/*.js ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json && npm run remap"
+    "test": "npm run lint && rimraf dist && tsc --project tsconfig-test.json && istanbul cover dist ./node_modules/.bin/jasmine JASMINE_CONFIG_PATH=jasmine.json && npm run remap"
   },
   "keywords": [],
   "author": "Blackbaud, Inc.",
@@ -37,6 +37,7 @@
     "istanbul": "0.4.5",
     "jasmine": "3.1.0",
     "mock-require": "3.0.2",
+    "remap-istanbul": "0.11.1",
     "rewiremock": "3.7.1",
     "rimraf": "2.6.2",
     "rollup": "0.58.2",

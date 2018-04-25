@@ -1,0 +1,8 @@
+instrumentation:
+  excludes: ['**/*.spec.js', '**/fixtures/*.js']
+reporting:
+    print: summary
+    reports:
+      - html
+      - json
+    dir: ./coverage
