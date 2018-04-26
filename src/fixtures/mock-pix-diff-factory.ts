@@ -1,12 +1,9 @@
-import { MockPixDiff } from './mock-pix-diff';
+export const MockPixDiffFactory: any = function(config: any) {
+  MockPixDiffFactory.config = config;
+  return MockPixDiffFactory.instance;
+};
 
-export class MockPixDiffFactory {
-  public static THRESHOLD_PERCENT = 'percent';
-  public static RESULT_SIMILAR = 5;
-  public static RESULT_IDENTICAL = 7;
-  public static instance: MockPixDiff;
-
-  constructor() {
-    return MockPixDiffFactory.instance;
-  }
-}
+MockPixDiffFactory.THRESHOLD_PERCENT = 'percent';
+MockPixDiffFactory.RESULT_SIMILAR = 5;
+MockPixDiffFactory.RESULT_IDENTICAL = 7;
+MockPixDiffFactory.instance = {};

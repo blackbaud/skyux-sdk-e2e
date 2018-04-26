@@ -15,8 +15,8 @@
         "build": "rimraf dist && tsc --project tsconfig.json && rollup -c rollup.config.js && node ./scripts/prepare-package.js",
         "lint": "tslint 'src/**/*.ts'",
         "prepare-test": "npm run build && node ./scripts/prepare-test.js",
-        "remap": "./node_modules/.bin/remap-istanbul -i ./coverage/coverage-final.json -t html -o ./coverage && rimraf ./coverage/dist",
-        "test": "npm run lint && rimraf dist coverage && tsc --project tsconfig-test.json && ./node_modules/.bin/istanbul cover ./node_modules/.bin/jasmine JASMINE_CONFIG_PATH=jasmine.json && npm run remap"
+        "remap": "node ./scripts/remap-coverage.js",
+        "test": "npm run lint && rimraf dist coverage && tsc --project tsconfig-test.json && ./node_modules/.bin/istanbul cover ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json && npm run remap"
       },
       "keywords": [],
       "author": "Blackbaud, Inc.",

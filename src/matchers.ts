@@ -21,6 +21,7 @@
   };
 
   const globalRef: any = global;
+  /*istanbul ignore else */
   if (globalRef.beforeEach) {
     globalRef.beforeEach(() => {
       globalRef.jasmine.addMatchers(SkyVisualMatchers);

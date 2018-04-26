@@ -1,10 +1,8 @@
 instrumentation:
   root: ./dist
   excludes: ['**/*.spec.js', '**/fixtures/*.js']
-  include-all-sources: true
 reporting:
+  print: none
   reports:
-    - html
     - json
-    - text-summary
   dir: ./coverage

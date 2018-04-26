@@ -3,33 +3,12 @@ import {
   SkyVisualCompareScreenshotResult
 } from './types';
 
-// Apply jasmine matchers when this file is imported into a spec.
+// Apply jasmine matchers as a side effect when this file is imported into a spec.
 import './matchers';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
 const protractor = require('protractor');
-
-function createComparator(): any {
-  const defaults = {
-    basePath: 'screenshots-baseline-local',
-    baseline: true,
-    createdPath: 'screenshots-created-local',
-    createdPathDiff: 'screenshots-created-diff-local',
-    diffPath: 'screenshots-diff-local',
-    height: 800,
-    width: 1000
-  };
-
-  const config = Object.assign(
-    {},
-    defaults,
-    protractor.browser.skyVisualConfig &&
-    protractor.browser.skyVisualConfig.compareScreenshot
-  );
-
-  return new PixDiff(config);
-}
 
 export abstract class SkyVisual {
   public static compareScreenshot(
@@ -37,7 +16,7 @@ export abstract class SkyVisual {
     config?: SkyVisualCompareScreenshotConfig
   ): Promise<SkyVisualCompareScreenshotResult> {
     if (!protractor.browser.pixDiff) {
-      protractor.browser.pixDiff = createComparator();
+      protractor.browser.pixDiff = SkyVisual.createComparator();
     }
 
     const defaults: SkyVisualCompareScreenshotConfig = {
@@ -57,28 +36,63 @@ export abstract class SkyVisual {
         }
       )
       .then((results: any) => {
-        const code = results.code;
-        const mismatchPercentage = (results.differences / results.dimension * 100).toFixed(2);
-        const message = `Screenshots have mismatch of ${mismatchPercentage} percent!`;
-
         const isSimilar = (
-          code === PixDiff.RESULT_SIMILAR ||
-          code === PixDiff.RESULT_IDENTICAL
+          results.code === PixDiff.RESULT_SIMILAR ||
+          results.code === PixDiff.RESULT_IDENTICAL
         );
 
-        return { isSimilar, message };
+        let message: string;
+        if (isSimilar) {
+          message = 'Screenshots are similar.';
+        } else {
+          const mismatchPercentage = (results.differences / results.dimension * 100).toFixed(2);
+          message = `Screenshots have mismatch of ${mismatchPercentage} percent!`;
+        }
+
+        return {
+          isSimilar,
+          message
+        };
       })
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
         if (error.message.indexOf('saving current image') > -1) {
+          const message = `[${screenshotName}] ${error.message}`;
+
+          // Wait for a tick so that the log is printed beneath the
+          // spec's heading in the console.
           setTimeout(() => {
-            logger.info(`[${screenshotName}] ${error.message}`);
+            logger.info(message);
           });
 
-          return Promise.resolve({ isSimilar: true, message: '' });
+          return Promise.resolve({
+            isSimilar: true,
+            message
+          });
         }
 
         throw error;
       });
+  }
+
+  private static createComparator(): any {
+    const defaults = {
+      basePath: 'screenshots-baseline-local',
+      baseline: true,
+      createdPath: 'screenshots-created-local',
+      createdPathDiff: 'screenshots-created-diff-local',
+      diffPath: 'screenshots-diff-local',
+      height: 800,
+      width: 1000
+    };
+
+    const config = Object.assign(
+      {},
+      defaults,
+      protractor.browser.skyVisualConfig &&
+      protractor.browser.skyVisualConfig.compareScreenshot
+    );
+
+    return new PixDiff(config);
   }
 }
