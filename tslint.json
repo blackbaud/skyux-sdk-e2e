@@ -3,14 +3,28 @@
     "tslint:recommended"
   ],
   "rules": {
+    "interface-name": [true, "never-prefix"],
+    "member-access": false,
     "member-ordering": [
       true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
+      {
+        "order": [
+          "public-static-field",
+          "public-instance-field",
+          "private-static-field",
+          "private-instance-field",
+          "public-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
     ],
     "no-console": [false],
+    "no-empty": [false],
     "no-string-literal": false,
+    "no-var-requires": false,
+    "only-arrow-functions": false,
     "quotemark": [
       true,
       "single",

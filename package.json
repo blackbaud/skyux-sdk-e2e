@@ -1,9 +1,9 @@
 {
   "name": "@blackbaud/skyux-visual",
-  "version": "1.0.0",
-  "description": "Provides a node.js library for running e2e visual tests.",
-  "main": "dist/bundles/skyux-visual.umd.js",
-  "module": "index.ts",
+  "version": "0.0.1",
+  "description": "Provides a Node.js library for running e2e visual tests",
+  "main": "bundles/skyux-visual.umd.js",
+  "module": "index.js",
   "engines": {
     "node": ">=6.14.1"
   },
@@ -12,16 +12,11 @@
     "url": "https://github.com/blackbaud/skyux-visual.git"
   },
   "scripts": {
-    "ci": "npm run test:ci && npm run build",
-    "test": "npm run lint && npm run test:unit",
-    "test:ci": "npm run test:unit:ci",
-    "test:unit": "npm run test:unit:base -- config/karma/local.karma.conf.js",
-    "test:unit:ci": "npm run test:unit:base -- config/karma/ci.karma.conf.js",
-    "test:unit:base": "node ./node_modules/karma/bin/karma start",
-    "pretest": "npm run lint",
-    "build": "rimraf dist && tsc && webpack --config config/webpack/webpack.prod.config.js",
-    "watch": "npm run test:unit -- --auto-watch --no-single-run",
-    "lint": "tslint 'src/**/*.ts'"
+    "build": "rimraf dist && tsc --project tsconfig.json && rollup -c rollup.config.js && node ./scripts/prepare-package.js",
+    "lint": "tslint 'src/**/*.ts'",
+    "prepare-test": "npm run build && node ./scripts/prepare-test.js",
+    "remap": "node ./scripts/remap-coverage.js",
+    "test": "npm run lint && rimraf dist coverage && tsc --project tsconfig-test.json && ./node_modules/.bin/istanbul cover ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json && npm run remap"
   },
   "keywords": [],
   "author": "Blackbaud, Inc.",
@@ -31,7 +26,25 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-visual#readme",
   "dependencies": {
+    "@blackbaud/skyux-logger": "1.0.2",
     "pix-diff": "2.0.1"
   },
-  "devDependencies": {}
+  "peerDependencies": {
+    "protractor": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "2.8.6",
+    "@types/node": "9.6.6",
+    "istanbul": "0.4.5",
+    "jasmine": "3.1.0",
+    "remap-istanbul": "0.11.1",
+    "rewiremock": "3.7.1",
+    "rimraf": "2.6.2",
+    "rollup": "0.58.2",
+    "rollup-plugin-commonjs": "9.1.0",
+    "rollup-plugin-node-resolve": "3.3.0",
+    "rollup-plugin-uglify": "3.0.0",
+    "tslint": "5.9.1",
+    "typescript": "2.8.1"
+  }
 }

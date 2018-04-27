@@ -18,5 +18,7 @@ jspm_packages
 
 # Build directory
 dist
+screenshots-baseline-local
+screenshots-diff-local
 
 .DS_Store
