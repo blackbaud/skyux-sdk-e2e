@@ -12,8 +12,6 @@ import {
 } from '@blackbaud/skyux-builder/runtime/testing/e2e';
 
 describe('', () => {
-  SkyVisual.loadMatchers();
-
   it('should', () => {
     SkyHostBrowser.get('action-button');
 
