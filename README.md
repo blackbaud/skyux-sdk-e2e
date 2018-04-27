@@ -1,6 +1,6 @@
 # SKY UX Visual
 
-**some.spec.ts**
+**some.e2e-spec.ts**
 
 ```
 import {
