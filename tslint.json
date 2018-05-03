@@ -37,6 +37,11 @@
         "multiline": "never",
         "singleline": "never"
       }
+    ],
+    "typedef": [
+      true,
+      "call-signature",
+      "property-declaration"
     ]
   }
 }

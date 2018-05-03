@@ -1,11 +1,11 @@
-# SKY UX Visual
+# SKY UX Library - E2E
 
 **some.e2e-spec.ts**
 
 ```
 import {
-  SkyVisual
-} from '@blackbaud/skyux-visual';
+  expect
+} from '@blackbaud/skyux-lib-e2e';
 
 import {
   SkyHostBrowser
@@ -14,12 +14,9 @@ import {
 describe('', () => {
   it('should', () => {
     SkyHostBrowser.get('action-button');
-
-    const result = SkyVisual.compareScreenshot('action-button', {
-      selector: '#screenshot-action-button'
+    expect('#screenshot-action-button').toMatchBaseline({
+      breakpoint: 'sm'
     });
-
-    expect(result).toMatchBaseline();
   });
 });
 ```

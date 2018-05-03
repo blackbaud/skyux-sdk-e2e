@@ -12,7 +12,7 @@ export default {
       'pix-diff': 'PixDiff',
       'protractor': 'protractor'
     },
-    name: 'skyux-visual'
+    name: 'skyux-lib-e2e'
   },
   context: 'this',
   plugins: [

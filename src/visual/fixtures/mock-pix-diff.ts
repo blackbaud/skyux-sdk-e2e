@@ -1,5 +1,5 @@
 export class MockPixDiff {
-  public checkRegion() {
+  public checkRegion(): Promise<any> {
     return Promise.resolve({
       code: 7,
       differences: 1,
