@@ -1,10 +1,15 @@
-import { SkyHostBrowserBreakpoint } from './host-browser-breakpoint';
+import {
+  SkyHostBrowserBreakpoint
+} from './host-browser-breakpoint';
 
 export abstract class SkyHostBrowser {
+  private static hostUtils = require('@blackbaud/skyux-builder/utils/host-utils');
   private static protractor = require('protractor');
-  private static hostUtils = require('../utils/host-utils');
 
-  public static get(url: string, timeout = 0): Promise<any> {
+  public static get(
+    url: string,
+    timeout = 0
+  ): Promise<any> {
     const params = SkyHostBrowser.protractor.browser.params;
     const destination = SkyHostBrowser.hostUtils.resolve(
       url,
@@ -29,8 +34,14 @@ export abstract class SkyHostBrowser {
     ).getWebElement();
   }
 
-  public static setWindowDimensions(width: number, height: number): void {
-    SkyHostBrowser.protractor.browser.driver.manage().window().setSize(width, height);
+  public static setWindowDimensions(
+    width: number,
+    height: number
+  ): void {
+    SkyHostBrowser.protractor.browser.driver
+      .manage()
+      .window()
+      .setSize(width, height);
   }
 
   public static setWindowBreakpoint(breakpoint: SkyHostBrowserBreakpoint): void {

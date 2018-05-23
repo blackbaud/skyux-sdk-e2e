@@ -8,9 +8,7 @@ import { MockPixDiffFactory } from './fixtures/mock-pix-diff-factory';
 (rewiremock('protractor').with({}) as any).dynamic();
 rewiremock.enable();
 
-import {
-  SkyVisual
-} from './index';
+import { SkyVisual } from './visual';
 
 describe('SkyVisual', () => {
   let mockLogger: any;
@@ -19,7 +17,7 @@ describe('SkyVisual', () => {
 
   beforeEach(() => {
     mockLogger = {
-      info() {}
+      info(): void {}
     };
 
     mockPixDiff = new MockPixDiff();
@@ -31,11 +29,11 @@ describe('SkyVisual', () => {
         }
       },
       by: {
-        css(selector: string) {
+        css(selector: string): any {
           return selector;
         }
       },
-      element(value: any) {
+      element(value: any): any {
         return value;
       }
     };
@@ -45,7 +43,7 @@ describe('SkyVisual', () => {
     rewiremock.disable();
   });
 
-  function applyMocks() {
+  function applyMocks(): void {
     rewiremock.getMock('@blackbaud/skyux-logger').with(mockLogger);
     rewiremock.getMock('protractor').with(mockProtractor);
     MockPixDiffFactory.instance = mockPixDiff;
@@ -143,8 +141,8 @@ describe('SkyVisual', () => {
 
   describe('matchers', () => {
     it('should allow custom matchers', () => {
-      expect({ isSimilar: true, message: '' }).toMatchBaseline();
-      expect({ isSimilar: false, message: '' }).not.toMatchBaseline();
+      expect({ isSimilar: true, message: '' }).toMatchBaselineScreenshot();
+      expect({ isSimilar: false, message: '' }).not.toMatchBaselineScreenshot();
     });
   });
 });

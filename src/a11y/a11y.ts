@@ -1,19 +1,19 @@
 const axeBuilder = require('axe-webdriverjs');
+const axeConfig = require('@blackbaud/skyux-builder/config/axe/axe.config');
 const logger = require('@blackbaud/skyux-logger');
-const axeConfig = require('../config/axe/axe.config');
 
-export abstract class SkyA11y {
+export abstract class SkyA11yAnalyzer {
   private static browser = require('protractor').browser;
 
-  public static run(): Promise<number> {
-    return SkyA11y.browser
-      .getCurrentUrl()
+  public static run(selector: string): Promise<number> {
+    return SkyA11yAnalyzer.browser.getCurrentUrl()
       .then((url: string) => new Promise((resolve) => {
         const config = axeConfig.getConfig();
 
         logger.info(`Starting accessibility checks for ${url}...`);
 
-        axeBuilder(SkyA11y.browser.driver)
+        axeBuilder(SkyA11yAnalyzer.browser.driver)
+          .include(selector)
           .options(config)
           .analyze((results: any) => {
             const numViolations = results.violations.length;
@@ -22,7 +22,7 @@ export abstract class SkyA11y {
             logger.info(`Accessibility checks finished with ${numViolations} ${subject}.\n`);
 
             if (numViolations > 0) {
-              SkyA11y.logViolations(results);
+              SkyA11yAnalyzer.logViolations(results);
             }
 
             resolve(numViolations);

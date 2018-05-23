@@ -1,10 +1,5 @@
-import {
-  SkyVisualCompareScreenshotConfig,
-  SkyVisualCompareScreenshotResult
-} from './types';
-
-// Apply jasmine matchers as a side effect when this file is imported into a spec.
-import './matchers';
+import { SkyVisualCompareScreenshotConfig } from './compare-screenshot-config';
+import { SkyVisualCompareScreenshotResult } from './compare-screenshot-result';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
@@ -16,9 +11,6 @@ export abstract class SkyVisual {
   public static compareScreenshot(
     config: SkyVisualCompareScreenshotConfig
   ): Promise<SkyVisualCompareScreenshotResult> {
-    if (!protractor.browser.pixDiff) {
-      protractor.browser.pixDiff = SkyVisual.createComparator();
-    }
 
     const defaults: SkyVisualCompareScreenshotConfig = {
       selector: 'body'
@@ -74,25 +66,28 @@ export abstract class SkyVisual {
         throw error;
       });
   }
-
-  private static createComparator(): any {
-    const defaults = {
-      basePath: 'screenshots-baseline-local',
-      baseline: true,
-      createdPath: 'screenshots-created-local',
-      createdPathDiff: 'screenshots-created-diff-local',
-      diffPath: 'screenshots-diff-local',
-      height: 800,
-      width: 1000
-    };
-
-    const config = Object.assign(
-      {},
-      defaults,
-      protractor.browser.skyVisualConfig &&
-      protractor.browser.skyVisualConfig.compareScreenshot
-    );
-
-    return new PixDiff(config);
-  }
 }
+
+function createComparator(): any {
+  const defaults = {
+    basePath: 'screenshots-baseline-local',
+    baseline: true,
+    createdPath: 'screenshots-created-local',
+    createdPathDiff: 'screenshots-created-diff-local',
+    diffPath: 'screenshots-diff-local',
+    height: 800,
+    width: 1000
+  };
+
+  const config = Object.assign(
+    {},
+    defaults,
+    protractor.browser.skyE2E &&
+    protractor.browser.skyE2E.visualConfig &&
+    protractor.browser.skyE2E.visualConfig.compareScreenshot
+  );
+
+  return new PixDiff(config);
+}
+
+protractor.browser.pixDiff = createComparator();

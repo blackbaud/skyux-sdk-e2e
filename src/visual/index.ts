@@ -1,1 +1,2 @@
-export * from './matchers';
+export * from './compare-screenshot-config';
+export * from './visual';
