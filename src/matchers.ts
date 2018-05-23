@@ -1,9 +1,4 @@
 import {
-  SkyA11yAnalyzer,
-  SkyA11yAnalyzerConfig
-} from './a11y';
-
-import {
   SkyVisual,
   SkyVisualCompareScreenshotConfig
 } from './visual';
@@ -29,39 +24,6 @@ const SkyE2EMatchers: jasmine.CustomMatcherFactories = {
           message: '',
           pass: true
         };
-      }
-    };
-  },
-
-  toBeAccessible(): jasmine.CustomMatcher {
-    return {
-      compare(
-        selector: string,
-        callback: () => void = () => {},
-        config?: SkyA11yAnalyzerConfig
-      ): jasmine.CustomMatcherResult {
-
-        const result: any = {
-          message: '',
-          pass: true
-        };
-
-        SkyA11yAnalyzer.run(selector)
-          .then(() => callback())
-          .catch((err: any) => {
-            globalRef.fail(err.message);
-            callback();
-          });
-
-        // Asynchronous matchers are currently unsupported, but
-        // the method above works to fail the specific test in the
-        // callback manually, if checks do not pass.
-        // ---
-        // A side effect of this technique is the matcher cannot be
-        // paired with a `.not.toBeA11y` operator (since the returned
-        // result is always `true`). For this particular matcher,
-        // checking if an element is not accessible may be irrelevant.
-        return result;
       }
     };
   }
