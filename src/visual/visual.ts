@@ -1,5 +1,6 @@
-import { SkyVisualCompareScreenshotConfig } from './compare-screenshot-config';
-import { SkyVisualCompareScreenshotResult } from './compare-screenshot-result';
+import {
+  SkyVisualCompareScreenshotConfig
+} from './compare-screenshot-config';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
@@ -9,19 +10,17 @@ let nextUniqueId = 0;
 
 export abstract class SkyVisual {
   public static compareScreenshot(
-    config: SkyVisualCompareScreenshotConfig
-  ): Promise<SkyVisualCompareScreenshotResult> {
-
-    const defaults: SkyVisualCompareScreenshotConfig = {
-      selector: 'body'
-    };
-
+    selector = 'body',
+    config?: SkyVisualCompareScreenshotConfig
+  ): Promise<any> {
+    const defaults: SkyVisualCompareScreenshotConfig = {};
     const settings = Object.assign({}, defaults, config);
-    const subject = protractor.element(protractor.by.css(settings.selector));
+
+    const subject = protractor.element(protractor.by.css(selector));
     const thresholdPercent = 0.02;
 
     if (!settings.screenshotName) {
-      settings.screenshotName = settings.selector
+      settings.screenshotName = selector
         .replace(/\W+(?!$)/g, '-')
         .replace(/\W+$/, '')
         .toLowerCase() + nextUniqueId++;

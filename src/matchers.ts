@@ -15,11 +15,10 @@ const SkyE2EMatchers: jasmine.CustomMatcherFactories = {
     return {
       compare(
         selector: string,
-        config: SkyVisualCompareScreenshotConfig,
-        callback: () => void = () => {}
+        callback: () => void = () => {},
+        config?: SkyVisualCompareScreenshotConfig
       ): jasmine.CustomMatcherResult {
-
-        SkyVisual.compareScreenshot(config)
+        SkyVisual.compareScreenshot(selector, config)
           .then(() => callback())
           .catch((err) => {
             globalRef.fail(err.message);
