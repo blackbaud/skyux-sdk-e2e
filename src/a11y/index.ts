@@ -1,2 +1,2 @@
-export * from './a11y-config';
-export * from './a11y';
+export * from './a11y-analyzer-config';
+export * from './a11y-analyzer';

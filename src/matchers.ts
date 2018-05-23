@@ -1,6 +1,6 @@
 import {
   SkyA11yAnalyzer,
-  SkyA11yConfig
+  SkyA11yAnalyzerConfig
 } from './a11y';
 
 import {
@@ -39,7 +39,7 @@ const SkyE2EMatchers: jasmine.CustomMatcherFactories = {
       compare(
         selector: string,
         callback: () => void = () => {},
-        config?: SkyA11yConfig
+        config?: SkyA11yAnalyzerConfig
       ): jasmine.CustomMatcherResult {
 
         const result: any = {

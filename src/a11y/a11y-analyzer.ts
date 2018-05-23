@@ -1,3 +1,7 @@
+import {
+  SkyA11yAnalyzerConfig
+} from './a11y-analyzer-config';
+
 const axeBuilder = require('axe-webdriverjs');
 const axeConfig = require('@blackbaud/skyux-builder/config/axe/axe.config');
 const logger = require('@blackbaud/skyux-logger');
@@ -5,16 +9,14 @@ const logger = require('@blackbaud/skyux-logger');
 export abstract class SkyA11yAnalyzer {
   private static browser = require('protractor').browser;
 
-  public static run(selector: string): Promise<number> {
-    return SkyA11yAnalyzer.browser.getCurrentUrl()
-      .then((url: string) => new Promise((resolve) => {
-        const config = axeConfig.getConfig();
-
-        logger.info(`Starting accessibility checks for ${url}...`);
+  public static run(selector: string, config?: SkyA11yAnalyzerConfig): Promise<any> {
+    return new Promise((resolve, reject) => {
+        const defaults = axeConfig.getConfig();
+        const settings = Object.assign({}, defaults, config);
 
         axeBuilder(SkyA11yAnalyzer.browser.driver)
           .include(selector)
-          .options(config)
+          .options(settings)
           .analyze((results: any) => {
             const numViolations = results.violations.length;
             const subject = (numViolations === 1) ? 'violation' : 'violations';
@@ -22,18 +24,21 @@ export abstract class SkyA11yAnalyzer {
             logger.info(`Accessibility checks finished with ${numViolations} ${subject}.\n`);
 
             if (numViolations > 0) {
-              SkyA11yAnalyzer.logViolations(results);
+              const message = SkyA11yAnalyzer.parseMessage(results.violations);
+              reject(new Error(message));
             }
 
-            resolve(numViolations);
+            resolve();
           });
-      }));
+      });
   }
 
-  private static logViolations(violations: any[]): void {
-    violations.forEach((violation) => {
+  private static parseMessage(violations: any[]): string {
+    let message = 'Expected element to pass accessibility checks.\n\n';
+
+    violations.forEach((violation: any) => {
       const wcagTags = violation.tags
-        .filter((tag: string) => tag.match(/wcag\d{3}|^best*/gi))
+        .filter((tag: any) => tag.match(/wcag\d{3}|^best*/gi))
         .join(', ');
 
       const html = violation.nodes.reduce((accumulator: string, node: any) => {
@@ -46,7 +51,9 @@ export abstract class SkyA11yAnalyzer {
         `${html}\n\n`
       ].join('\n');
 
-      logger.error(error);
+      message += `${error}\n`;
     });
+
+    return message;
   }
 }
