@@ -47,6 +47,8 @@ export abstract class SkyVisual {
             `Screenshots have mismatch of ${mismatchPercentage} percent!`;
           throw new Error(message);
         }
+
+        return isSimilar;
       })
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
@@ -65,28 +67,28 @@ export abstract class SkyVisual {
         throw error;
       });
   }
+
+  public static createComparator(): any {
+    const defaults = {
+      basePath: 'screenshots-baseline-local',
+      baseline: true,
+      createdPath: 'screenshots-created-local',
+      createdPathDiff: 'screenshots-created-diff-local',
+      diffPath: 'screenshots-diff-local',
+      height: 800,
+      width: 1000
+    };
+
+    const config = Object.assign(
+      {},
+      defaults,
+      protractor.browser.skyE2E &&
+      protractor.browser.skyE2E.visualConfig &&
+      protractor.browser.skyE2E.visualConfig.compareScreenshot
+    );
+
+    return new PixDiff(config);
+  }
 }
 
-function createComparator(): any {
-  const defaults = {
-    basePath: 'screenshots-baseline-local',
-    baseline: true,
-    createdPath: 'screenshots-created-local',
-    createdPathDiff: 'screenshots-created-diff-local',
-    diffPath: 'screenshots-diff-local',
-    height: 800,
-    width: 1000
-  };
-
-  const config = Object.assign(
-    {},
-    defaults,
-    protractor.browser.skyE2E &&
-    protractor.browser.skyE2E.visualConfig &&
-    protractor.browser.skyE2E.visualConfig.compareScreenshot
-  );
-
-  return new PixDiff(config);
-}
-
-protractor.browser.pixDiff = createComparator();
+protractor.browser.pixDiff = SkyVisual.createComparator();
