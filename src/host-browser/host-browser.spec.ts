@@ -1,11 +1,3 @@
-// import rewiremock from 'rewiremock';
-
-// (rewiremock('protractor').with({
-//   browser: {}
-// }) as any).dynamic();
-
-// rewiremock.enable();
-
 import {
   SkyHostBrowser
 } from './host-browser';
@@ -66,10 +58,6 @@ describe('Host browser', () => {
     SkyHostBrowser['hostUtils'] = mockHostUtils;
     SkyHostBrowser['protractor'] = mockProtractor;
   });
-
-  // afterEach(() => {
-  //   mock.stopAll();
-  // });
 
   it('should navigate to a URL', () => {
     spyOn(mockHostUtils, 'resolve').and.returnValue('url');
