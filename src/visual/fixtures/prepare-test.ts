@@ -2,7 +2,7 @@ import rewiremock from 'rewiremock';
 
 import {
   MockPixDiffFactory
-} from '../visual/fixtures/mock-pix-diff-factory';
+} from './mock-pix-diff-factory';
 
 let isActive = false;
 

@@ -1,11 +1,14 @@
 import {
-  SkyVisual,
-  SkyVisualCompareScreenshotConfig
+  SkyVisual
 } from './visual';
+
+import {
+  SkyVisualCompareScreenshotConfig
+} from './visual-compare-screenshot-config';
 
 const globalRef: any = global;
 
-const SkyE2EMatchers: jasmine.CustomMatcherFactories = {
+const SkyVisualMatchers: jasmine.CustomMatcherFactories = {
   toMatchBaselineScreenshot(): jasmine.CustomMatcher {
     return {
       compare(
@@ -31,7 +34,7 @@ const SkyE2EMatchers: jasmine.CustomMatcherFactories = {
 };
 
 globalRef.beforeEach(() => {
-  globalRef.jasmine.addMatchers(SkyE2EMatchers);
+  globalRef.jasmine.addMatchers(SkyVisualMatchers);
 });
 
 export const expect: (actual: any) => any = globalRef.expect;

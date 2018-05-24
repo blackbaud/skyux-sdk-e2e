@@ -1,7 +1,7 @@
 import {
   cleanupTests,
   prepareTest
-} from './shared/prepare-test';
+} from './fixtures';
 
 prepareTest();
 
@@ -11,7 +11,7 @@ import {
 
 import {
   expect
-} from './matchers';
+} from './visual-matchers';
 
 describe('SkyVisual', () => {
   afterAll(() => {

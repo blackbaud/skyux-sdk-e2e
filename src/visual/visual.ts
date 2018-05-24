@@ -1,6 +1,6 @@
 import {
   SkyVisualCompareScreenshotConfig
-} from './compare-screenshot-config';
+} from './visual-compare-screenshot-config';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');

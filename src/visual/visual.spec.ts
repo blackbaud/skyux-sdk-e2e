@@ -1,16 +1,10 @@
 import {
-  MockPixDiff
-} from './fixtures/mock-pix-diff';
-
-import {
-  MockPixDiffFactory
-} from './fixtures/mock-pix-diff-factory';
-
-import {
   cleanupTests,
+  MockPixDiff,
+  MockPixDiffFactory,
   prepareTest,
   resetMock
-} from '../shared/prepare-test';
+} from './fixtures';
 
 prepareTest();
 
