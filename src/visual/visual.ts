@@ -1,37 +1,37 @@
 import {
-  SkyVisualCompareScreenshotConfig,
-  SkyVisualCompareScreenshotResult
-} from './types';
-
-// Apply jasmine matchers as a side effect when this file is imported into a spec.
-import './matchers';
+  SkyVisualCompareScreenshotConfig
+} from './visual-compare-screenshot-config';
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
 const protractor = require('protractor');
 
+let nextUniqueId = 0;
+
 export abstract class SkyVisual {
   public static compareScreenshot(
-    screenshotName: string,
+    selector = 'body',
     config?: SkyVisualCompareScreenshotConfig
-  ): Promise<SkyVisualCompareScreenshotResult> {
-    if (!protractor.browser.pixDiff) {
-      protractor.browser.pixDiff = SkyVisual.createComparator();
-    }
-
-    const defaults: SkyVisualCompareScreenshotConfig = {
-      selector: 'body'
-    };
-
+  ): Promise<any> {
+    const defaults: SkyVisualCompareScreenshotConfig = {};
     const settings = Object.assign({}, defaults, config);
-    const subject = protractor.element(protractor.by.css(settings.selector));
+
+    const subject = protractor.element(protractor.by.css(selector));
+    const thresholdPercent = 0.02;
+
+    if (!settings.screenshotName) {
+      settings.screenshotName = selector
+        .replace(/\W+(?!$)/g, '-')
+        .replace(/\W+$/, '')
+        .toLowerCase() + nextUniqueId++;
+    }
 
     return protractor.browser.pixDiff
       .checkRegion(
         subject,
-        screenshotName,
+        settings.screenshotName,
         {
-          threshold: 0.02,
+          threshold: thresholdPercent,
           thresholdType: PixDiff.THRESHOLD_PERCENT
         }
       )
@@ -41,23 +41,19 @@ export abstract class SkyVisual {
           results.code === PixDiff.RESULT_IDENTICAL
         );
 
-        let message: string;
-        if (isSimilar) {
-          message = 'Screenshots are similar.';
-        } else {
+        if (!isSimilar) {
           const mismatchPercentage = (results.differences / results.dimension * 100).toFixed(2);
-          message = `Screenshots have mismatch of ${mismatchPercentage} percent!`;
+          const message = 'Expected screenshots to match.\n' +
+            `Screenshots have mismatch of ${mismatchPercentage} percent!`;
+          throw new Error(message);
         }
 
-        return {
-          isSimilar,
-          message
-        };
+        return isSimilar;
       })
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
         if (error.message.indexOf('saving current image') > -1) {
-          const message = `[${screenshotName}] ${error.message}`;
+          const message = `[${settings.screenshotName}] ${error.message}`;
 
           // Wait for a tick so that the log is printed beneath the
           // spec's heading in the console.
@@ -65,17 +61,14 @@ export abstract class SkyVisual {
             logger.info(message);
           });
 
-          return Promise.resolve({
-            isSimilar: true,
-            message
-          });
+          return;
         }
 
         throw error;
       });
   }
 
-  private static createComparator(): any {
+  public static createComparator(): any {
     const defaults = {
       basePath: 'screenshots-baseline-local',
       baseline: true,
@@ -89,10 +82,13 @@ export abstract class SkyVisual {
     const config = Object.assign(
       {},
       defaults,
-      protractor.browser.skyVisualConfig &&
-      protractor.browser.skyVisualConfig.compareScreenshot
+      protractor.browser.skyE2E &&
+      protractor.browser.skyE2E.visualConfig &&
+      protractor.browser.skyE2E.visualConfig.compareScreenshot
     );
 
     return new PixDiff(config);
   }
 }
+
+protractor.browser.pixDiff = SkyVisual.createComparator();

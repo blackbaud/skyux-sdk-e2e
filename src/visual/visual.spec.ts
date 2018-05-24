@@ -1,16 +1,16 @@
-import rewiremock from 'rewiremock';
+import {
+  cleanupTests,
+  MockPixDiff,
+  MockPixDiffFactory,
+  prepareTest,
+  resetMock
+} from './fixtures';
 
-import { MockPixDiff } from './fixtures/mock-pix-diff';
-import { MockPixDiffFactory } from './fixtures/mock-pix-diff-factory';
-
-(rewiremock('@blackbaud/skyux-logger').with({}) as any).dynamic();
-(rewiremock('pix-diff').with(MockPixDiffFactory) as any).dynamic();
-(rewiremock('protractor').with({}) as any).dynamic();
-rewiremock.enable();
+prepareTest();
 
 import {
   SkyVisual
-} from './index';
+} from './visual';
 
 describe('SkyVisual', () => {
   let mockLogger: any;
@@ -19,44 +19,42 @@ describe('SkyVisual', () => {
 
   beforeEach(() => {
     mockLogger = {
-      info() {}
+      info(): void {}
     };
 
     mockPixDiff = new MockPixDiff();
 
     mockProtractor = {
-      browser: {
-        skyVisualConfig: {
-          foo: 'bar'
-        }
-      },
+      browser: { },
       by: {
-        css(selector: string) {
+        css(selector: string): any {
           return selector;
         }
       },
-      element(value: any) {
+      element(value: any): any {
         return value;
       }
     };
   });
 
   afterAll(() => {
-    rewiremock.disable();
+    cleanupTests();
   });
 
-  function applyMocks() {
-    rewiremock.getMock('@blackbaud/skyux-logger').with(mockLogger);
-    rewiremock.getMock('protractor').with(mockProtractor);
+  function applyMocks(): void {
+    resetMock('@blackbaud/skyux-logger', mockLogger);
+
     MockPixDiffFactory.instance = mockPixDiff;
-    rewiremock.getMock('pix-diff').with(MockPixDiffFactory);
+    resetMock('pix-diff', MockPixDiffFactory);
+
+    resetMock('protractor', mockProtractor);
+    mockProtractor.browser.pixDiff = SkyVisual.createComparator();
   }
 
   it('should compare similar screenshots', (done) => {
     applyMocks();
-    SkyVisual.compareScreenshot('foo').then((result: any) => {
-      expect(result.isSimilar).toEqual(true);
-      expect(result.message).toEqual('Screenshots are similar.');
+    SkyVisual.compareScreenshot().then((result: boolean) => {
+      expect(result).toEqual(true);
       done();
     });
   });
@@ -72,16 +70,30 @@ describe('SkyVisual', () => {
 
     applyMocks();
 
-    SkyVisual.compareScreenshot('foo').then((result: any) => {
-      expect(result.isSimilar).toEqual(false);
-      expect(result.message).toEqual('Screenshots have mismatch of 50.00 percent!');
+    SkyVisual.compareScreenshot('foo').catch((err: any) => {
+      expect(err.message).toEqual(
+        'Expected screenshots to match.\nScreenshots have mismatch of 50.00 percent!'
+      );
+      done();
+    });
+  });
+
+  it('should default to checking the body element', (done) => {
+    const spy = spyOn(mockPixDiff, 'checkRegion').and.callThrough();
+    applyMocks();
+    SkyVisual.compareScreenshot().then(() => {
+      expect(spy.calls.first().args[0]).toEqual('body');
       done();
     });
   });
 
   it('should extend config', (done) => {
-    mockProtractor.browser.skyVisualConfig.compareScreenshot = {
-      width: 1200
+    mockProtractor.browser.skyE2E = {
+      visualConfig: {
+        compareScreenshot: {
+          width: 1200
+        }
+      }
     };
 
     applyMocks();
@@ -116,9 +128,7 @@ describe('SkyVisual', () => {
 
     applyMocks();
 
-    SkyVisual.compareScreenshot('foo').then((result: any) => {
-      expect(result.isSimilar).toEqual(true);
-      expect(result.message).toEqual('[foo] saving current image');
+    SkyVisual.compareScreenshot('body', { screenshotName: 'foo' }).then(() => {
       setTimeout(() => {
         expect(loggerSpy).toHaveBeenCalledWith('[foo] saving current image');
         done();
@@ -138,13 +148,6 @@ describe('SkyVisual', () => {
     SkyVisual.compareScreenshot('foo').catch((error: any) => {
       expect(error.message).toEqual('something bad happened');
       done();
-    });
-  });
-
-  describe('matchers', () => {
-    it('should allow custom matchers', () => {
-      expect({ isSimilar: true, message: '' }).toMatchBaseline();
-      expect({ isSimilar: false, message: '' }).not.toMatchBaseline();
     });
   });
 });

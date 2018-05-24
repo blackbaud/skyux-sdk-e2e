@@ -1,25 +1,21 @@
-# SKY UX Visual
+# SKY UX Library - E2E
 
-**some.e2e-spec.ts**
+## Running visual tests
+
+**my.component.e2e-spec.ts**
 
 ```
 import {
-  SkyVisual
-} from '@blackbaud/skyux-visual';
-
-import {
+  expect,
   SkyHostBrowser
-} from '@blackbaud/skyux-builder/runtime/testing/e2e';
+} from '@blackbaud/skyux-lib-e2e';
 
-describe('', () => {
-  it('should', () => {
+describe('Action button', () => {
+  it('should match baseline screenshot', (done) => {
     SkyHostBrowser.get('action-button');
-
-    const result = SkyVisual.compareScreenshot('action-button', {
-      selector: '#screenshot-action-button'
+    expect('#screenshot-action-button').toMatchBaselineScreenshot(done, {
+      breakpoint: 'sm'
     });
-
-    expect(result).toMatchBaseline();
   });
 });
 ```

@@ -8,11 +8,12 @@ export default {
     file: './dist/bundles/index.umd.min.js',
     format: 'umd',
     globals: {
+      '@blackbaud/skyux-builder/utils/host-utils': 'hostUtils',
       '@blackbaud/skyux-logger': 'logger',
       'pix-diff': 'PixDiff',
       'protractor': 'protractor'
     },
-    name: 'skyux-visual'
+    name: 'skyux-lib-e2e'
   },
   context: 'this',
   plugins: [
@@ -21,6 +22,7 @@ export default {
     uglify()
   ],
   external: [
+    '@blackbaud/skyux-builder/utils/host-utils',
     '@blackbaud/skyux-logger',
     'pix-diff',
     'protractor'

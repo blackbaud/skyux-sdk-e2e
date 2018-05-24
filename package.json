@@ -1,15 +1,15 @@
 {
-  "name": "@blackbaud/skyux-visual",
+  "name": "@blackbaud/skyux-lib-e2e",
   "version": "0.0.1",
-  "description": "Provides a Node.js library for running e2e visual tests",
-  "main": "bundles/skyux-visual.umd.js",
+  "description": "Provides Node.js helpers during SKY UX e2e tests.",
+  "main": "bundles/skyux-lib-e2e.umd.js",
   "module": "index.js",
   "engines": {
     "node": ">=6.14.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/blackbaud/skyux-visual.git"
+    "url": "https://github.com/blackbaud/skyux-lib-e2e.git"
   },
   "scripts": {
     "build": "rimraf dist && tsc --project tsconfig.json && rollup -c rollup.config.js && node ./scripts/prepare-package.js",
@@ -22,21 +22,24 @@
   "author": "Blackbaud, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blackbaud/skyux-visual/issues"
+    "url": "https://github.com/blackbaud/skyux-lib-e2e/issues"
   },
-  "homepage": "https://github.com/blackbaud/skyux-visual#readme",
+  "homepage": "https://github.com/blackbaud/skyux-lib-e2e#readme",
   "dependencies": {
     "@blackbaud/skyux-logger": "1.0.2",
     "pix-diff": "2.0.1"
   },
   "peerDependencies": {
-    "protractor": "^5.1.0"
+    "protractor": "^5.1.0",
+    "@blackbaud/skyux-builder": "^1.14.0"
   },
   "devDependencies": {
+    "@blackbaud/skyux-builder": "1.14.0",
     "@types/jasmine": "2.8.6",
     "@types/node": "9.6.6",
     "istanbul": "0.4.5",
     "jasmine": "3.1.0",
+    "protractor": "5.1.2",
     "remap-istanbul": "0.11.1",
     "rewiremock": "3.7.1",
     "rimraf": "2.6.2",

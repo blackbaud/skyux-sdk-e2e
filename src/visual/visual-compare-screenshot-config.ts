@@ -1,3 +1,3 @@
 export interface SkyVisualCompareScreenshotConfig {
-  selector?: string;
+  screenshotName?: string;
 }

@@ -1,4 +1,4 @@
-export const MockPixDiffFactory: any = function(config: any) {
+export const MockPixDiffFactory: any = function(config: any): any {
   MockPixDiffFactory.config = config;
   return MockPixDiffFactory.instance;
 };
