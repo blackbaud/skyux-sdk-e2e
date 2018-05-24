@@ -44,7 +44,7 @@ export abstract class SkyHostBrowser {
       .setSize(width, height);
   }
 
-  public static setWindowBreakpoint(breakpoint: SkyHostBrowserBreakpoint): void {
+  public static setWindowBreakpoint(breakpoint?: SkyHostBrowserBreakpoint): void {
     let width;
     let height;
 
