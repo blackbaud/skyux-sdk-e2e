@@ -1,5 +1,5 @@
 {
-  "name": "@blackbaud/skyux-lib-e2e",
+  "name": "@skyux-sdk/e2e",
   "version": "0.0.1",
   "description": "Provides Node.js helpers during SKY UX e2e tests.",
   "main": "bundles/skyux-lib-e2e.umd.js",
