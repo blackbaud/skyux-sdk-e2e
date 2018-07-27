@@ -2,14 +2,14 @@
   "name": "@skyux-sdk/e2e",
   "version": "0.0.1",
   "description": "Provides Node.js helpers during SKY UX e2e tests.",
-  "main": "bundles/skyux-lib-e2e.umd.js",
+  "main": "bundles/skyux-sdk-e2e.umd.js",
   "module": "index.js",
   "engines": {
-    "node": ">=6.14.1"
+    "node": ">=8.11.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/blackbaud/skyux-lib-e2e.git"
+    "url": "https://github.com/blackbaud/skyux-sdk-e2e.git"
   },
   "scripts": {
     "build": "rimraf dist && tsc --project tsconfig.json && rollup -c rollup.config.js && node ./scripts/prepare-package.js",
@@ -21,9 +21,9 @@
   "author": "Blackbaud, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blackbaud/skyux-lib-e2e/issues"
+    "url": "https://github.com/blackbaud/skyux-sdk-e2e/issues"
   },
-  "homepage": "https://github.com/blackbaud/skyux-lib-e2e#readme",
+  "homepage": "https://github.com/blackbaud/skyux-sdk-e2e#readme",
   "dependencies": {
     "@blackbaud/skyux-logger": "1.0.2",
     "pix-diff": "2.0.1"

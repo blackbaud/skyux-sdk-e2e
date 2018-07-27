@@ -8,7 +8,7 @@
 import {
   expect,
   SkyHostBrowser
-} from '@blackbaud/skyux-lib-e2e';
+} from '@skyux-sdk/e2e';
 
 describe('Action button', () => {
   it('should match baseline screenshot', (done) => {
