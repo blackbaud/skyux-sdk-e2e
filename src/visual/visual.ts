@@ -21,6 +21,7 @@ export abstract class SkyVisual {
 
     if (!settings.screenshotName) {
       settings.screenshotName = selector
+        .replace(/\./g, '')
         .replace(/\W+(?!$)/g, '-')
         .replace(/\W+$/, '')
         .toLowerCase() + nextUniqueId++;
