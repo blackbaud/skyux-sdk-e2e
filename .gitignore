@@ -21,5 +21,4 @@ dist
 screenshots-baseline-local
 screenshots-diff-local
 
-package-lock.json
 .DS_Store
