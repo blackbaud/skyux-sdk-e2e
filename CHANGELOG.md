@@ -1,3 +1,7 @@
+# 3.0.0 (2018-09-20)
+
+- Initial major release.
+
 # 3.0.0-alpha.1 (2018-09-11)
 
 - Updated dependencies.
