@@ -28,8 +28,8 @@ export abstract class SkyVisual {
 
       logger.warn([
         'A unique screenshot name was not provided!\n',
-        `We'll use "${settings.screenshotName}" as a stand-in, but this can cause your screenshots to be`,
-        'overwritten if the element selectors being tested are the same from one test to another.',
+        `We'll use "${settings.screenshotName}" as a stand-in, but this can cause problems`,
+        'if you decide to change the order of the specs in the future.',
         'To set the screenshot name for each test, add a config object to the matcher:\n',
         '`expect(\'.foobar\').toMatchBaselineScreenshot(done, { screenshotName: \'unique-name\' });`'
       ].join(' '));
