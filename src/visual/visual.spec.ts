@@ -19,7 +19,8 @@ describe('SkyVisual', () => {
 
   beforeEach(() => {
     mockLogger = {
-      info(): void {}
+      info(): void {},
+      warn(): void {}
     };
 
     mockPixDiff = new MockPixDiff();
@@ -147,6 +148,32 @@ describe('SkyVisual', () => {
 
     SkyVisual.compareScreenshot('foo').catch((error: any) => {
       expect(error.message).toEqual('something bad happened');
+      done();
+    });
+  });
+
+  it('should warn the consumer if a screenshot name is not provided', (done) => {
+    const spy = spyOn(mockLogger, 'warn');
+
+    applyMocks();
+
+    SkyVisual.compareScreenshot().then((result: boolean) => {
+      expect(result).toEqual(true);
+      expect(spy).toHaveBeenCalled();
+      done();
+    });
+  });
+
+  it('should not warn the consumer if a screenshot name is provided', (done) => {
+    const spy = spyOn(mockLogger, 'warn');
+
+    applyMocks();
+
+    SkyVisual.compareScreenshot('foo', {
+      screenshotName: 'foo'
+    }).then((result: boolean) => {
+      expect(result).toEqual(true);
+      expect(spy).not.toHaveBeenCalled();
       done();
     });
   });
