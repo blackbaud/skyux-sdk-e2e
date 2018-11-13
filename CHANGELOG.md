@@ -1,3 +1,7 @@
+# 3.0.1 (2018-11-13)
+
+- Added console warning if `screenshotName` not set when comparing baselines. [#7](https://github.com/blackbaud/skyux-sdk-e2e/pull/7)
+
 # 3.0.0 (2018-09-20)
 
 - Initial major release.
