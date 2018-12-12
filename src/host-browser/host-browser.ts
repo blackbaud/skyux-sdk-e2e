@@ -3,7 +3,7 @@ import {
 } from './host-browser-breakpoint';
 
 export abstract class SkyHostBrowser {
-  private static hostUtils = require('@blackbaud/skyux-builder/utils/host-utils');
+  private static hostUtils = require('@skyux-sdk/builder/utils/host-utils');
   private static protractor = require('protractor');
 
   public static get(
