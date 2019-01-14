@@ -3,7 +3,7 @@
 
 export abstract class SkyA11y {
   private static axeBuilder: any = require('axe-webdriverjs');
-  private static axeConfig: any = require('@blackbaud/skyux-builder/config/axe/axe.config');
+  private static axeConfig: any = require('@skyux-sdk/builder/config/axe/axe.config');
   private static protractor = require('protractor');
   private static logger = require('@blackbaud/skyux-logger');
 

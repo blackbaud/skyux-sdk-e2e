@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-sdk-e2e#readme",
   "peerDependencies": {
-    "@blackbaud/skyux-builder": "^1.20.0",
+    "@skyux-sdk/builder": "^3.0.0-rc.0",
     "protractor": "^5.1.2"
   },
   "dependencies": {
@@ -31,8 +31,7 @@
     "pix-diff": "2.0.1"
   },
   "devDependencies": {
-    "@blackbaud/skyux-builder": "1.20.2",
-    "@blackbaud/skyux": "2.24.0",
+    "@skyux-sdk/builder": "github:blackbaud/skyux-builder#rc-rename-npm-package",
     "@types/jasmine": "2.8.6",
     "@types/node": "9.6.6",
     "istanbul": "0.4.5",
