@@ -1,3 +1,7 @@
+# 3.1.1 (2019-04-03)
+
+- Fixed `SkyHostBrowser` to return correct types for its methods. [#12](https://github.com/blackbaud/skyux-sdk-e2e/pull/12)
+
 # 3.1.0 (2019-01-14)
 
 - Added support for `^@skyux-sdk/builder@3.0.0-rc.0`. [#11](https://github.com/blackbaud/skyux-sdk-e2e/pull/11)
