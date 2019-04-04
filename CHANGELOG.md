@@ -1,3 +1,7 @@
+# 3.1.2 (2019-04-04)
+
+- Reverted breaking change dependency upgrade; downgraded `axe-webdriverjs@2.2.0` to `axe-webdriverjs@1.3.0`.
+
 # 3.1.1 (2019-04-03)
 
 - Fixed `SkyHostBrowser` to return correct types for its methods. [#12](https://github.com/blackbaud/skyux-sdk-e2e/pull/12)

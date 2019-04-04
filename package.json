@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/e2e",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Provides Node.js helpers during SKY UX Builder E2E tests.",
   "main": "bundles/skyux-sdk-e2e.umd.js",
   "module": "index.js",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@blackbaud/skyux-logger": "1.1.1",
-    "axe-webdriverjs": "2.2.0",
+    "axe-webdriverjs": "1.3.0",
     "pix-diff": "2.0.1"
   },
   "devDependencies": {
