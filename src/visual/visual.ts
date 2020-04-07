@@ -7,10 +7,17 @@ const PixDiff = require('pix-diff');
 const protractor = require('protractor');
 
 export abstract class SkyVisual {
+
+  /**
+   * Captures a new screenshot and compares it with an existing screenshot.
+   * @param selector The CSS selector of the element to capture.
+   * @param config The configuration to use for the screenshot capture.
+   */
   public static compareScreenshot(
-    selector = 'body',
+    selector: string,
     config: SkyVisualCompareScreenshotConfig
   ): Promise<any> {
+
     const subject = protractor.element(protractor.by.css(selector));
     const thresholdPercent = 0.02;
 
