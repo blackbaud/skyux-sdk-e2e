@@ -1,3 +1,10 @@
+# 4.0.0-rc.0 (2020-04-07)
+
+## Breaking changes
+
+- Removed the `SkyA11y` utility. Accessibility testing should be done within unit tests using the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests). [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Made all parameters of the `toMatchBaselineScreenshot` Jasmine matcher required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+
 # 3.1.2 (2019-04-04)
 
 - Reverted breaking change dependency upgrade; downgraded `axe-webdriverjs@2.2.0` to `axe-webdriverjs@1.3.0`.
