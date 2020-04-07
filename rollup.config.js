@@ -8,7 +8,6 @@ export default {
     file: './dist/bundles/index.umd.min.js',
     format: 'umd',
     globals: {
-      '@skyux-sdk/builder/config/sky-pages/sky-pages.config': 'skyPagesConfig',
       '@skyux-sdk/builder/utils/host-utils': 'hostUtils',
       '@blackbaud/skyux-logger': 'logger',
       'pix-diff': 'PixDiff',
@@ -23,7 +22,6 @@ export default {
     terser()
   ],
   external: [
-    '@skyux-sdk/builder/config/axe/axe.config',
     '@skyux-sdk/builder/utils/host-utils',
     '@blackbaud/skyux-logger',
     'pix-diff',

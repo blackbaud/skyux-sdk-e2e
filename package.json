@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "@blackbaud/skyux-logger": "1.1.2",
-    "axe-webdriverjs": "2.3.0",
     "pix-diff": "2.0.1"
   },
   "devDependencies": {
