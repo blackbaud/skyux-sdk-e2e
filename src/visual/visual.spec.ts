@@ -83,17 +83,6 @@ describe('SkyVisual', () => {
     });
   });
 
-  it('should default to checking the body element', (done) => {
-    const spy = spyOn(mockPixDiff, 'checkRegion').and.callThrough();
-    applyMocks();
-    SkyVisual.compareScreenshot(undefined, {
-      screenshotName: 'foobar'
-    }).then(() => {
-      expect(spy.calls.first().args[0]).toEqual('body');
-      done();
-    });
-  });
-
   it('should extend config', (done) => {
     mockProtractor.browser.skyE2E = {
       visualConfig: {
