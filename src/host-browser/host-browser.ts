@@ -8,11 +8,7 @@ import {
 
 export abstract class SkyHostBrowser {
   private static hostUtils = require('@skyux-sdk/builder/utils/host-utils');
-<<<<<<< HEAD
-  private static protractor = require('protractor');
-=======
   private static protractor: Ptor = require('protractor');
->>>>>>> master
 
   public static async get(
     url: string,
