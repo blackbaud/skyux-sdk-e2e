@@ -1,6 +1,6 @@
 import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 
 export default {
   input: './dist/index.js',
@@ -8,7 +8,7 @@ export default {
     file: './dist/bundles/index.umd.min.js',
     format: 'umd',
     globals: {
-      '@skyux-sdk/builder/config/axe/axe.config': 'axeConfig',
+      '@skyux-sdk/builder/config/sky-pages/sky-pages.config': 'skyPagesConfig',
       '@skyux-sdk/builder/utils/host-utils': 'hostUtils',
       '@blackbaud/skyux-logger': 'logger',
       'pix-diff': 'PixDiff',
@@ -20,7 +20,7 @@ export default {
   plugins: [
     nodeResolve(),
     commonjs(),
-    uglify()
+    terser()
   ],
   external: [
     '@skyux-sdk/builder/config/axe/axe.config',

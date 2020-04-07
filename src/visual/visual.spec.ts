@@ -54,7 +54,9 @@ describe('SkyVisual', () => {
 
   it('should compare similar screenshots', (done) => {
     applyMocks();
-    SkyVisual.compareScreenshot().then((result: boolean) => {
+    SkyVisual.compareScreenshot('body', {
+      screenshotName: 'foobar'
+    }).then((result: boolean) => {
       expect(result).toEqual(true);
       done();
     });
@@ -71,7 +73,9 @@ describe('SkyVisual', () => {
 
     applyMocks();
 
-    SkyVisual.compareScreenshot('foo').catch((err: any) => {
+    SkyVisual.compareScreenshot('foo', {
+      screenshotName: 'foobar'
+    }).catch((err: any) => {
       expect(err.message).toEqual(
         'Expected screenshots to match.\nScreenshots have mismatch of 50.00 percent!'
       );
@@ -82,7 +86,9 @@ describe('SkyVisual', () => {
   it('should default to checking the body element', (done) => {
     const spy = spyOn(mockPixDiff, 'checkRegion').and.callThrough();
     applyMocks();
-    SkyVisual.compareScreenshot().then(() => {
+    SkyVisual.compareScreenshot(undefined, {
+      screenshotName: 'foobar'
+    }).then(() => {
       expect(spy.calls.first().args[0]).toEqual('body');
       done();
     });
@@ -99,7 +105,9 @@ describe('SkyVisual', () => {
 
     applyMocks();
 
-    SkyVisual.compareScreenshot('foo').then((result: any) => {
+    SkyVisual.compareScreenshot('foo', {
+      screenshotName: 'foobar'
+    }).then((result: any) => {
       expect(MockPixDiffFactory.config.width).toEqual(1200);
       done();
     });
@@ -112,7 +120,9 @@ describe('SkyVisual', () => {
 
     const createSpy = spyOn(SkyVisual as any, 'createComparator').and.callThrough();
 
-    SkyVisual.compareScreenshot('foo').then((result: any) => {
+    SkyVisual.compareScreenshot('foo', {
+      screenshotName: 'foobar'
+    }).then((result: any) => {
       expect(createSpy).not.toHaveBeenCalled();
       done();
     });
@@ -146,22 +156,29 @@ describe('SkyVisual', () => {
 
     applyMocks();
 
-    SkyVisual.compareScreenshot('foo').catch((error: any) => {
+    SkyVisual.compareScreenshot('foo', {
+      screenshotName: 'foobar'
+    }).catch((error: any) => {
       expect(error.message).toEqual('something bad happened');
       done();
     });
   });
 
-  it('should warn the consumer if a screenshot name is not provided', (done) => {
+  it('should throw an error if a screenshot name is not provided', async (done) => {
     const spy = spyOn(mockLogger, 'warn');
 
     applyMocks();
 
-    SkyVisual.compareScreenshot().then((result: boolean) => {
-      expect(result).toEqual(true);
-      expect(spy).toHaveBeenCalled();
+    try {
+      await SkyVisual.compareScreenshot('foo', {
+        screenshotName: undefined
+      });
+      fail();
       done();
-    });
+    } catch (error) {
+      expect(error.message).toContain('A unique screenshot name was not provided!');
+      done();
+    }
   });
 
   it('should not warn the consumer if a screenshot name is provided', (done) => {

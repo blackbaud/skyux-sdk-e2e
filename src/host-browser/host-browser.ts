@@ -1,12 +1,16 @@
 import {
+  Ptor
+} from 'protractor';
+
+import {
   SkyHostBrowserBreakpoint
 } from './host-browser-breakpoint';
 
 export abstract class SkyHostBrowser {
   private static hostUtils = require('@skyux-sdk/builder/utils/host-utils');
-  private static protractor = require('protractor');
+  private static protractor: Ptor = require('protractor');
 
-  public static get(
+  public static async get(
     url: string,
     timeout = 0
   ): Promise<any> {
@@ -18,12 +22,12 @@ export abstract class SkyHostBrowser {
       params.skyPagesConfig
     );
 
-    return SkyHostBrowser.protractor.browser.get(destination, timeout);
+    await SkyHostBrowser.protractor.browser.get(destination, timeout);
   }
 
-  public static moveCursorOffScreen(): void {
+  public static async moveCursorOffScreen(): Promise<void> {
     const moveToElement = SkyHostBrowser.querySelector('body');
-    SkyHostBrowser.protractor.browser.actions()
+    await SkyHostBrowser.protractor.browser.actions()
       .mouseMove(moveToElement, { x: 0, y: 0 })
       .perform();
   }
@@ -34,17 +38,17 @@ export abstract class SkyHostBrowser {
     ).getWebElement();
   }
 
-  public static setWindowDimensions(
+  public static async setWindowDimensions(
     width: number,
     height: number
-  ): void {
-    SkyHostBrowser.protractor.browser.driver
+  ): Promise<void> {
+    await SkyHostBrowser.protractor.browser.driver
       .manage()
       .window()
       .setSize(width, height);
   }
 
-  public static setWindowBreakpoint(breakpoint?: SkyHostBrowserBreakpoint): void {
+  public static async setWindowBreakpoint(breakpoint?: SkyHostBrowserBreakpoint): Promise<void> {
     let width;
     let height;
 
@@ -68,11 +72,11 @@ export abstract class SkyHostBrowser {
         break;
     }
 
-    SkyHostBrowser.setWindowDimensions(width, height);
+    await SkyHostBrowser.setWindowDimensions(width, height);
   }
 
-  public static scrollTo(selector: string): void {
+  public static async scrollTo(selector: string): Promise<void> {
     const elem = SkyHostBrowser.querySelector(selector);
-    SkyHostBrowser.protractor.browser.executeScript('arguments[0].scrollIntoView();', elem);
+    await SkyHostBrowser.protractor.browser.executeScript('arguments[0].scrollIntoView();', elem);
   }
 }
