@@ -31,6 +31,11 @@
   },
   "devDependencies": {
     "@skyux-sdk/builder": "4.0.0-rc.4",
+    "@types/jasmine": "3.5.10",
+    "@types/node": "13.11.0",
+    "istanbul": "0.4.5",
+    "jasmine": "3.5.0",
+    "protractor": "5.4.3",
     "remap-istanbul": "0.13.0",
     "rewiremock": "3.13.9",
     "rimraf": "3.0.2",
