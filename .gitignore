@@ -22,6 +22,3 @@ screenshots-baseline-local
 screenshots-diff-local
 
 .DS_Store
-
-# IDE files
-.idea/
