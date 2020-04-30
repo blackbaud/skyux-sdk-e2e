@@ -1,6 +1,6 @@
 # 3.2.0 (2020-04-30)
 
-- Added `SkyVisualThemeSelector` for switching between themes during a visual test run. [#27](https://github.com/blackbaud/skyux-sdk-e2e/pull/27)
+- Added `SkyVisualThemeSelector` for switching themes during a visual test run. [#27](https://github.com/blackbaud/skyux-sdk-e2e/pull/27)
 
 # 3.1.2 (2019-04-04)
 
