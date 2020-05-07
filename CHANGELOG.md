@@ -1,3 +1,7 @@
+# 4.0.0-rc.1 (2020-05-07)
+
+- Added bug fixes and features from the `master` branch.
+
 # 3.2.0 (2020-04-30)
 
 - Added `SkyVisualThemeSelector` for switching themes during a visual test run. [#27](https://github.com/blackbaud/skyux-sdk-e2e/pull/27)
