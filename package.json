@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/e2e",
-  "version": "4.0.0-rc.1",
+  "version": "4.0.0-rc.2",
   "description": "Provides Node.js helpers during SKY UX Builder E2E tests.",
   "main": "bundles/skyux-sdk-e2e.umd.js",
   "module": "index.js",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-sdk-e2e#readme",
   "peerDependencies": {
-    "@skyux-sdk/builder": "^4.0.0-rc.12",
+    "@skyux-sdk/builder": "^4.0.0-rc.14",
     "protractor": "^7.0.0"
   },
   "dependencies": {
@@ -39,7 +39,7 @@
     "@angular/platform-browser-dynamic": "9.1.9",
     "@angular/router": "9.1.9",
     "@blackbaud/auth-client": "2.25.0",
-    "@skyux-sdk/builder": "4.0.0-rc.12",
+    "@skyux-sdk/builder": "4.0.0-rc.14",
     "@skyux-sdk/testing": "4.0.0",
     "@skyux/assets": "4.0.0",
     "@skyux/config": "4.0.0",

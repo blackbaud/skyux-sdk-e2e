@@ -1,3 +1,9 @@
+# 4.0.0-rc.2 (2020-05-28)
+
+### New features
+
+- Added support for `protractor@^7`. [#29](https://github.com/blackbaud/skyux-sdk-e2e/pull/29)
+
 # 4.0.0-rc.1 (2020-05-07)
 
 - Added bug fixes and features from the `master` branch.
