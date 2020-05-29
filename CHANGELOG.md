@@ -6,8 +6,8 @@
 
 ## Breaking changes
 
-- Removed the `SkyA11y` utility. Accessibility testing should be done within unit tests using the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests). [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
-- Made all parameters of the `toMatchBaselineScreenshot` Jasmine matcher required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Removed the `SkyA11y` utility. Use the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests) for accessibility testing in unit tests. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Updated the parameters of the `toMatchBaselineScreenshot` Jasmine matcher to make them required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
 
 # 4.0.0-rc.2 (2020-05-28)
 
@@ -27,8 +27,8 @@
 
 ## Breaking changes
 
-- Removed the `SkyA11y` utility. Accessibility testing should be done within unit tests using the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests). [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
-- Made all parameters of the `toMatchBaselineScreenshot` Jasmine matcher required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Removed the `SkyA11y` utility. Use the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests) for accessibility testing in unit tests. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Updated the parameters of the `toMatchBaselineScreenshot` Jasmine matcher to make them required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
 
 # 3.1.2 (2019-04-04)
 
