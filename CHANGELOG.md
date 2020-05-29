@@ -1,6 +1,34 @@
+# 4.0.0 (2020-05-29)
+
+### New features
+
+- Added support for `protractor@^7`. [#29](https://github.com/blackbaud/skyux-sdk-e2e/pull/29)
+
+## Breaking changes
+
+- Removed the `SkyA11y` utility. Use the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests) for accessibility testing in unit tests. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Updated the parameters of the `toMatchBaselineScreenshot` Jasmine matcher to make them required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+
+# 4.0.0-rc.2 (2020-05-28)
+
+### New features
+
+- Added support for `protractor@^7`. [#29](https://github.com/blackbaud/skyux-sdk-e2e/pull/29)
+
+# 4.0.0-rc.1 (2020-05-07)
+
+- Added bug fixes and features from the `master` branch.
+
 # 3.2.0 (2020-04-30)
 
 - Added `SkyVisualThemeSelector` for switching themes during a visual test run. [#27](https://github.com/blackbaud/skyux-sdk-e2e/pull/27)
+
+# 4.0.0-rc.0 (2020-04-07)
+
+## Breaking changes
+
+- Removed the `SkyA11y` utility. Use the [`toBeAccessible` Jasmine matcher](https://developer.blackbaud.com/skyux/learn/get-started/advanced/accessibility-unit-tests) for accessibility testing in unit tests. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
+- Updated the parameters of the `toMatchBaselineScreenshot` Jasmine matcher to make them required. [#24](https://github.com/blackbaud/skyux-sdk-e2e/pull/24)
 
 # 3.1.2 (2019-04-04)
 

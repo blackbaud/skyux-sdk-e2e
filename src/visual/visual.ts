@@ -6,30 +6,24 @@ const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
 const protractor = require('protractor');
 
-let nextUniqueId = 0;
-
 export abstract class SkyVisual {
+
+  /**
+   * Captures a new screenshot and compares it with an existing screenshot.
+   * @param selector The CSS selector of the element to capture.
+   * @param config The configuration to use for the screenshot capture.
+   */
   public static compareScreenshot(
-    selector = 'body',
-    config?: SkyVisualCompareScreenshotConfig
+    selector: string,
+    config: SkyVisualCompareScreenshotConfig
   ): Promise<any> {
-    const defaults: SkyVisualCompareScreenshotConfig = {};
-    const settings = Object.assign({}, defaults, config);
 
     const subject = protractor.element(protractor.by.css(selector));
     const thresholdPercent = 0.02;
 
-    if (!settings.screenshotName) {
-      settings.screenshotName = selector
-        .replace(/\./g, '')
-        .replace(/\W+(?!$)/g, '-')
-        .replace(/\W+$/, '')
-        .toLowerCase() + nextUniqueId++;
-
-      logger.warn([
+    if (!config.screenshotName) {
+      throw new Error([
         'A unique screenshot name was not provided!\n',
-        `We'll use "${settings.screenshotName}" as a stand-in, but this can cause problems`,
-        'if you decide to change the order of the specs in the future.',
         'To set the screenshot name for each test, add a config object to the matcher:\n',
         '`expect(\'.foobar\').toMatchBaselineScreenshot(done, { screenshotName: \'unique-name\' });`'
       ].join(' '));
@@ -38,7 +32,7 @@ export abstract class SkyVisual {
     return protractor.browser.pixDiff
       .checkRegion(
         subject,
-        settings.screenshotName,
+        config.screenshotName,
         {
           threshold: thresholdPercent,
           thresholdType: PixDiff.THRESHOLD_PERCENT
@@ -62,7 +56,7 @@ export abstract class SkyVisual {
       .catch((error: any) => {
         // Ignore 'baseline image not found' errors from PixDiff.
         if (error.message.indexOf('saving current image') > -1) {
-          const message = `[${settings.screenshotName}] ${error.message}`;
+          const message = `[${config.screenshotName}] ${error.message}`;
 
           // Wait for a tick so that the log is printed beneath the
           // spec's heading in the console.
