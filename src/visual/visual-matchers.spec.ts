@@ -10,7 +10,7 @@ import {
 } from './visual';
 
 import {
-  expect
+  expect, expectAsync
 } from './visual-matchers';
 
 describe('SkyVisual', () => {
@@ -46,5 +46,31 @@ describe('SkyVisual', () => {
       expect(failSpy).toHaveBeenCalled();
       done();
     });
+  });
+
+  describe('async matchers', () => {
+
+    it('should run the screenshot comparison tool', async () => {
+      const spy = spyOn(SkyVisual, 'compareScreenshot').and.callFake(() => {
+        return Promise.resolve();
+      });
+
+      const config = {
+        screenshotName: 'bar'
+      };
+
+      await expectAsync('foo').toMatchBaselineScreenshot(config);
+
+      expect(spy).toHaveBeenCalledWith('foo', config);
+    });
+
+    it('should handle screenshot comparison tool errors', async () => {
+      const spy = spyOn(SkyVisual, 'compareScreenshot').and.callFake(() => {
+        return Promise.reject(new Error('some error'));
+      });
+
+      await expectAsync('foo').not.toMatchBaselineScreenshot();
+    });
+
   });
 });

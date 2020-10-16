@@ -4,7 +4,12 @@ import {
 
 const logger = require('@blackbaud/skyux-logger');
 const PixDiff = require('pix-diff');
-const protractor = require('protractor');
+
+import {
+  browser,
+  by,
+  element
+} from 'protractor';
 
 export abstract class SkyVisual {
 
@@ -18,7 +23,7 @@ export abstract class SkyVisual {
     config: SkyVisualCompareScreenshotConfig
   ): Promise<any> {
 
-    const subject = protractor.element(protractor.by.css(selector));
+    const subject = element(by.css(selector));
     const thresholdPercent = 0.02;
 
     if (!config.screenshotName) {
@@ -29,7 +34,7 @@ export abstract class SkyVisual {
       ].join(' '));
     }
 
-    return protractor.browser.pixDiff
+    return browser.pixDiff
       .checkRegion(
         subject,
         config.screenshotName,
@@ -85,13 +90,13 @@ export abstract class SkyVisual {
     const config = Object.assign(
       {},
       defaults,
-      protractor.browser.skyE2E &&
-      protractor.browser.skyE2E.visualConfig &&
-      protractor.browser.skyE2E.visualConfig.compareScreenshot
+      browser.skyE2E &&
+      browser.skyE2E.visualConfig &&
+      browser.skyE2E.visualConfig.compareScreenshot
     );
 
     return new PixDiff(config);
   }
 }
 
-protractor.browser.pixDiff = SkyVisual.createComparator();
+browser.pixDiff = SkyVisual.createComparator();
