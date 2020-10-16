@@ -34,7 +34,7 @@ describe('SkyVisual', () => {
   });
 
   it('should handle screenshot comparison tool errors', (done) => {
-    const spy = spyOn(SkyVisual, 'compareScreenshot').and.callFake(() => {
+    spyOn(SkyVisual, 'compareScreenshot').and.callFake(() => {
       return Promise.reject(new Error('some error'));
     });
 
@@ -65,7 +65,7 @@ describe('SkyVisual', () => {
     });
 
     it('should handle screenshot comparison tool errors', async () => {
-      const spy = spyOn(SkyVisual, 'compareScreenshot').and.callFake(() => {
+      spyOn(SkyVisual, 'compareScreenshot').and.callFake(() => {
         return Promise.reject(new Error('some error'));
       });
 

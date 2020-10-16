@@ -60,7 +60,7 @@ const asyncVisualMatchers: jasmine.CustomAsyncMatcherFactories = {
 };
 
 globalRef.beforeEach(() => {
-  globalRef.jasmine.addMatchers(visualMatchers);
+  jasmine.addMatchers(visualMatchers);
   jasmine.addAsyncMatchers(asyncVisualMatchers);
 });
 
