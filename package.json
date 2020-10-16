@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-sdk-e2e#readme",
   "peerDependencies": {
-    "@skyux-sdk/builder": "^4.0.0-rc.14",
+    "@skyux-sdk/builder": "^4.0.0",
     "protractor": "^7.0.0"
   },
   "dependencies": {
