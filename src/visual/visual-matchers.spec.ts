@@ -10,7 +10,8 @@ import {
 } from './visual';
 
 import {
-  expect, expectAsync
+  expect,
+  expectAsync
 } from './visual-matchers';
 
 describe('SkyVisual', () => {
