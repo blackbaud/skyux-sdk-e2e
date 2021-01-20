@@ -57,7 +57,6 @@ describe('Host browser', () => {
       resolve(): any {}
     };
 
-    // spyOnProperty(SkyHostBrowser, 'hostUtils', 'get').and.returnValue(mockHostUtils);
     SkyHostBrowser['protractor'] = mockProtractor;
 
     mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
@@ -132,4 +131,25 @@ describe('Host browser', () => {
 
     expect(spy).toHaveBeenCalledWith('arguments[0].scrollIntoView();', 'element');
   });
+
+  it('should resolve Host URL if `@skyux-sdk/builder` is not installed', async () => {
+    mockProtractor.browser.params = {
+      skyuxHostUrl: 'https://app.blackbaud.com/?local=true&_cfg=abcdefg'
+    };
+
+    const spy = spyOn(mockProtractor.browser, 'get').and.callThrough();
+
+    await SkyHostBrowser.get('/foo');
+    expect(spy).toHaveBeenCalledWith('https://app.blackbaud.com/foo?local=true&_cfg=abcdefg', 0);
+    spy.calls.reset();
+
+    await SkyHostBrowser.get('foo');
+    expect(spy).toHaveBeenCalledWith('https://app.blackbaud.com/foo?local=true&_cfg=abcdefg', 0);
+    spy.calls.reset();
+
+    await SkyHostBrowser.get('/foo?leid=foobar');
+    expect(spy).toHaveBeenCalledWith('https://app.blackbaud.com/foo?leid=foobar&local=true&_cfg=abcdefg', 0);
+    spy.calls.reset();
+  });
+
 });
