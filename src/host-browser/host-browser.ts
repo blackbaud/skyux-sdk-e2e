@@ -7,7 +7,27 @@ import {
 } from './host-browser-breakpoint';
 
 export abstract class SkyHostBrowser {
-  private static hostUtils = require('@skyux-sdk/builder/utils/host-utils');
+
+  private static get hostUtils(): {
+    resolve: (...args: any[]) => string;
+  } {
+    try {
+      return require('@skyux-sdk/builder/utils/host-utils');
+    } catch (err) {
+      return {
+        resolve: (...args: any[]) => {
+          // TODO: Check if the path includes a '?'.
+          const hostUrl = SkyHostBrowser.protractor.browser.params.skyuxHostUrl;
+          if (hostUrl) {
+            return SkyHostBrowser.protractor.browser.params.skyuxHostUrl.replace('?', `${args[0]}?`);
+          } else {
+            throw new Error(`SKY UX Host could not be found using the provided URL: ${hostUrl}`);
+          }
+        }
+      };
+    }
+  };
+
   private static protractor: Ptor = require('protractor');
 
   public static async get(

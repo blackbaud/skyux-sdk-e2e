@@ -9,7 +9,8 @@
     "noImplicitAny": true,
     "outDir": "dist",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*.ts"

@@ -1,3 +1,5 @@
+import mock from 'mock-require';
+
 import {
   SkyHostBrowser
 } from './host-browser';
@@ -55,8 +57,14 @@ describe('Host browser', () => {
       resolve(): any {}
     };
 
-    SkyHostBrowser['hostUtils'] = mockHostUtils;
+    // spyOnProperty(SkyHostBrowser, 'hostUtils', 'get').and.returnValue(mockHostUtils);
     SkyHostBrowser['protractor'] = mockProtractor;
+
+    mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
+  });
+
+  afterEach(() => {
+    mock.stopAll();
   });
 
   it('should navigate to a URL', () => {

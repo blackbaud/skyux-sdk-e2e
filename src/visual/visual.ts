@@ -87,7 +87,8 @@ export abstract class SkyVisual {
       defaults,
       protractor.browser.skyE2E &&
       protractor.browser.skyE2E.visualConfig &&
-      protractor.browser.skyE2E.visualConfig.compareScreenshot
+      protractor.browser.skyE2E.visualConfig.compareScreenshot,
+      protractor.browser.params?.skyuxVisualRegressionTestingConfig
     );
 
     return new PixDiff(config);
