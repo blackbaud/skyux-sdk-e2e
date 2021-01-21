@@ -26,11 +26,11 @@ export abstract class SkyHostBrowser {
     const destination = (params.skyuxHostUrl)
       ? this.resolveHostUrl(params.skyuxHostUrl, url)
       : SkyHostBrowser.hostUtils.resolve(
-        url,
-        params.localUrl,
-        params.chunks,
-        params.skyPagesConfig
-      );
+          url,
+          params.localUrl,
+          params.chunks,
+          params.skyPagesConfig
+        );
 
     await SkyHostBrowser.protractor.browser.get(destination, timeout);
   }

@@ -105,7 +105,9 @@ describe('SkyVisual', () => {
   it('should extend config from protractor params', (done) => {
     mockProtractor.browser.params = {
       skyuxVisualRegressionTestingConfig: {
-        width: 1200
+        compareScreenshot: {
+          width: 1200
+        }
       }
     };
 
@@ -113,7 +115,7 @@ describe('SkyVisual', () => {
 
     SkyVisual.compareScreenshot('foo', {
       screenshotName: 'foobar'
-    }).then((result: any) => {
+    }).then(() => {
       expect(MockPixDiffFactory.config.width).toEqual(1200);
       done();
     });
