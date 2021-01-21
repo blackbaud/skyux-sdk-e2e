@@ -8,6 +8,9 @@ import {
 
 export abstract class SkyHostBrowser {
 
+  /**
+   * Add backward compatibility with `@skyux-sdk/builder@^4`.
+   */
   private static get hostUtils(): {
     resolve: (...args: any[]) => string;
   } {
@@ -23,6 +26,9 @@ export abstract class SkyHostBrowser {
     timeout = 0
   ): Promise<any> {
     const params = SkyHostBrowser.protractor.browser.params;
+
+    // For Angular CLI applications, the SKY UX Host URL is provided as a Protractor param in `@skyux-sdk/angular-builders`.
+    // Otherwise, default back to `@skyux-sdk/builder`.
     const destination = (params.skyuxHostUrl)
       ? this.resolveHostUrl(params.skyuxHostUrl, url)
       : SkyHostBrowser.hostUtils.resolve(
