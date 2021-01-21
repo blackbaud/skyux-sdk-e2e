@@ -7,7 +7,18 @@ import {
 } from './host-browser-breakpoint';
 
 export abstract class SkyHostBrowser {
-  private static hostUtils = require('@skyux-sdk/builder/utils/host-utils');
+
+  /**
+   * Add backward compatibility with `@skyux-sdk/builder@^4`.
+   */
+  private static get hostUtils(): {
+    resolve: (...args: any[]) => string;
+  } {
+    try {
+      return require('@skyux-sdk/builder/utils/host-utils');
+    } catch (err) { }
+  };
+
   private static protractor: Ptor = require('protractor');
 
   public static async get(
@@ -15,12 +26,17 @@ export abstract class SkyHostBrowser {
     timeout = 0
   ): Promise<any> {
     const params = SkyHostBrowser.protractor.browser.params;
-    const destination = SkyHostBrowser.hostUtils.resolve(
-      url,
-      params.localUrl,
-      params.chunks,
-      params.skyPagesConfig
-    );
+
+    // For Angular CLI applications, the SKY UX Host URL is provided as a Protractor param in `@skyux-sdk/angular-builders`.
+    // Otherwise, default back to `@skyux-sdk/builder`.
+    const destination = (params.skyuxHostUrl)
+      ? this.resolveHostUrl(params.skyuxHostUrl, url)
+      : SkyHostBrowser.hostUtils.resolve(
+          url,
+          params.localUrl,
+          params.chunks,
+          params.skyPagesConfig
+        );
 
     await SkyHostBrowser.protractor.browser.get(destination, timeout);
   }
@@ -78,5 +94,16 @@ export abstract class SkyHostBrowser {
   public static async scrollTo(selector: string): Promise<void> {
     const elem = SkyHostBrowser.querySelector(selector);
     await SkyHostBrowser.protractor.browser.executeScript('arguments[0].scrollIntoView();', elem);
+  }
+
+  private static resolveHostUrl(hostUrl: string, pathname: string): string {
+    // Remove first forward slash, if it exists.
+    pathname = (pathname.indexOf('/') === 0)
+      ? pathname.substr(1)
+      : pathname;
+
+    return (pathname.indexOf('?') > -1)
+      ? hostUrl.replace('?', `${pathname}&`)
+      : hostUrl.replace('?', `${pathname}?`);
   }
 }

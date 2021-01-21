@@ -87,7 +87,10 @@ export abstract class SkyVisual {
       defaults,
       protractor.browser.skyE2E &&
       protractor.browser.skyE2E.visualConfig &&
-      protractor.browser.skyE2E.visualConfig.compareScreenshot
+      protractor.browser.skyE2E.visualConfig.compareScreenshot,
+
+      // For Angular CLI applications, the config is provided as a Protractor param in `@skyux-sdk/angular-builders`.
+      protractor.browser.params?.skyuxVisualRegressionTestingConfig?.compareScreenshot
     );
 
     return new PixDiff(config);
