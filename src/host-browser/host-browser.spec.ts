@@ -9,6 +9,7 @@ describe('Host browser', () => {
   let mockHostUtils: any;
   let mockBrowserActions: any;
   let mockWindowActions: any;
+  let browserGetSpy: jasmine.Spy;
 
   beforeEach(() => {
     mockBrowserActions = {
@@ -57,6 +58,8 @@ describe('Host browser', () => {
       resolve(): any {}
     };
 
+    browserGetSpy = spyOn(mockProtractor.browser, 'get');
+
     SkyHostBrowser['protractor'] = mockProtractor;
 
     mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
@@ -68,18 +71,14 @@ describe('Host browser', () => {
 
   it('should navigate to a URL', () => {
     spyOn(mockHostUtils, 'resolve').and.returnValue('url');
-    const spy = spyOn(mockProtractor.browser, 'get').and.callThrough();
-
     SkyHostBrowser.get('/foo');
-    expect(spy).toHaveBeenCalledWith('url', 0);
+    expect(browserGetSpy).toHaveBeenCalledWith('url', 0);
   });
 
   it('should navigate to a URL with a timeout', () => {
     spyOn(mockHostUtils, 'resolve').and.returnValue('url');
-    const spy = spyOn(mockProtractor.browser, 'get').and.callThrough();
-
     SkyHostBrowser.get('/foo', 500);
-    expect(spy).toHaveBeenCalledWith('url', 500);
+    expect(browserGetSpy).toHaveBeenCalledWith('url', 500);
   });
 
   it('should move cursor off screen', () => {
@@ -132,24 +131,21 @@ describe('Host browser', () => {
     expect(spy).toHaveBeenCalledWith('arguments[0].scrollIntoView();', 'element');
   });
 
+  async function verifyHostUrl(relativePath: string, expectedUrl: string): Promise<void> {
+    await SkyHostBrowser.get(relativePath);
+    expect(browserGetSpy).toHaveBeenCalledWith(expectedUrl, 0);
+    browserGetSpy.calls.reset();
+  }
+
   it('should resolve Host URL if `@skyux-sdk/builder` is not installed', async () => {
+    // Setup Protractor `params`.
     mockProtractor.browser.params = {
       skyuxHostUrl: 'https://app.blackbaud.com/?local=true&_cfg=abcdefg'
     };
 
-    const spy = spyOn(mockProtractor.browser, 'get').and.callThrough();
-
-    await SkyHostBrowser.get('/foo');
-    expect(spy).toHaveBeenCalledWith('https://app.blackbaud.com/foo?local=true&_cfg=abcdefg', 0);
-    spy.calls.reset();
-
-    await SkyHostBrowser.get('foo');
-    expect(spy).toHaveBeenCalledWith('https://app.blackbaud.com/foo?local=true&_cfg=abcdefg', 0);
-    spy.calls.reset();
-
-    await SkyHostBrowser.get('/foo?leid=foobar');
-    expect(spy).toHaveBeenCalledWith('https://app.blackbaud.com/foo?leid=foobar&local=true&_cfg=abcdefg', 0);
-    spy.calls.reset();
+    await verifyHostUrl('/foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
+    await verifyHostUrl('foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
+    await verifyHostUrl('/foo?leid=foobar', 'https://app.blackbaud.com/foo?leid=foobar&local=true&_cfg=abcdefg');
   });
 
 });
