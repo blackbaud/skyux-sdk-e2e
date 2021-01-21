@@ -22,7 +22,7 @@ jobs:
       run: npm ci
     - name: Publish
       run: |
-        node ./scripts/prepare-package
+        npm run build
         cd dist
         npm publish
       env:
