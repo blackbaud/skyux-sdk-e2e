@@ -27,16 +27,17 @@ export abstract class SkyHostBrowser {
   ): Promise<any> {
     const params = SkyHostBrowser.protractor.browser.params;
 
-    // For Angular CLI applications, the SKY UX Host URL is provided as a Protractor param in `@skyux-sdk/angular-builders`.
-    // Otherwise, default back to `@skyux-sdk/builder`.
-    const destination = (params.skyuxHostUrl)
-      ? this.resolveHostUrl(params.skyuxHostUrl, url)
-      : SkyHostBrowser.hostUtils.resolve(
-          url,
-          params.localUrl,
-          params.chunks,
-          params.skyPagesConfig
-        );
+    const destination = (this.hostUtils)
+      ? SkyHostBrowser.hostUtils.resolve(
+        url,
+        params.localUrl,
+        params.chunks,
+        params.skyPagesConfig
+      )
+      : SkyHostBrowser.resolveHostUrl(
+        params.skyuxHostUrl || SkyHostBrowser.protractor.browser.baseUrl,
+        url
+      );
 
     await SkyHostBrowser.protractor.browser.get(destination, timeout);
   }
