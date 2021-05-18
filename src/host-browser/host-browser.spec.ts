@@ -59,41 +59,47 @@ describe('Host browser', () => {
     };
 
     browserGetSpy = spyOn(mockProtractor.browser, 'get');
-
-    SkyHostBrowser['protractor'] = mockProtractor;
-
-    mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
   });
 
   afterEach(() => {
     mock.stopAll();
   });
 
+  function setupTest(): void {
+    SkyHostBrowser['protractor'] = mockProtractor;
+    mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
+  }
+
   it('should navigate to a URL', () => {
+    setupTest();
     spyOn(mockHostUtils, 'resolve').and.returnValue('url');
     SkyHostBrowser.get('/foo');
     expect(browserGetSpy).toHaveBeenCalledWith('url', 0);
   });
 
   it('should navigate to a URL with a timeout', () => {
+    setupTest();
     spyOn(mockHostUtils, 'resolve').and.returnValue('url');
     SkyHostBrowser.get('/foo', 500);
     expect(browserGetSpy).toHaveBeenCalledWith('url', 500);
   });
 
   it('should move cursor off screen', () => {
+    setupTest();
     const spy = spyOn(mockBrowserActions, 'mouseMove').and.callThrough();
     SkyHostBrowser.moveCursorOffScreen();
     expect(spy).toHaveBeenCalledWith('body', { x: 0, y: 0 });
   });
 
   it('should set window dimensions', () => {
+    setupTest();
     const spy = spyOn(mockWindowActions, 'setSize').and.callThrough();
     SkyHostBrowser.setWindowDimensions(5, 6);
     expect(spy).toHaveBeenCalledWith(5, 6);
   });
 
   it('should set window width for a breakpoint', () => {
+    setupTest();
     const spy = spyOn(mockWindowActions, 'setSize').and.callThrough();
 
     SkyHostBrowser.setWindowBreakpoint('xs');
@@ -118,6 +124,8 @@ describe('Host browser', () => {
   });
 
   it('should scroll to element', () => {
+    setupTest();
+
     spyOn(mockProtractor, 'element').and.returnValue({
       getWebElement(): string {
         return 'element';
@@ -138,6 +146,10 @@ describe('Host browser', () => {
   }
 
   it('should resolve Host URL if `@skyux-sdk/builder` is not installed', async () => {
+    mockHostUtils = undefined;
+
+    setupTest();
+
     // Setup Protractor `params`.
     mockProtractor.browser.params = {
       skyuxHostUrl: 'https://app.blackbaud.com/?local=true&_cfg=abcdefg'
@@ -146,6 +158,17 @@ describe('Host browser', () => {
     await verifyHostUrl('/foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
     await verifyHostUrl('foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
     await verifyHostUrl('/foo?leid=foobar', 'https://app.blackbaud.com/foo?leid=foobar&local=true&_cfg=abcdefg');
+  });
+
+  it('should default to base URL if browser params unset', async () => {
+    mockHostUtils = undefined;
+    mockProtractor.browser.baseUrl = 'https://localhost:4200/';
+
+    setupTest();
+
+    await verifyHostUrl('/foo', 'https://localhost:4200/');
+    await verifyHostUrl('foo', 'https://localhost:4200/');
+    await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/');
   });
 
 });
