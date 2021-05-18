@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/e2e",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Provides Node.js helpers during SKY UX Builder E2E tests.",
   "main": "bundles/skyux-sdk-e2e.umd.js",
   "module": "index.js",

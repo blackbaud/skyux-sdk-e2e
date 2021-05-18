@@ -1,3 +1,7 @@
+# 4.0.2 (2021-05-18)
+
+- Fixed the `SkyHostBrowser` utility to revert to `protractor.browser.baseUrl` when the SKY UX Host URL is undefined. [#39](https://github.com/blackbaud/skyux-sdk-e2e/pull/39)
+
 # 4.0.1 (2021-01-21)
 
 - Updated the `SkyVisual` and `SkyHostBrowser` utilities to work when `@skyux-sdk/builder` is not installed. [#37](https://github.com/blackbaud/skyux-sdk-e2e/pull/37)
