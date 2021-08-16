@@ -106,6 +106,10 @@ export abstract class SkyHostBrowser {
       ? pathname.substr(1)
       : pathname;
 
+    if (hostUrl.indexOf('?') === -1) {
+      return hostUrl + pathname;
+    }
+
     return (pathname.indexOf('?') > -1)
       ? hostUrl.replace('?', `${pathname}&`)
       : hostUrl.replace('?', `${pathname}?`);
