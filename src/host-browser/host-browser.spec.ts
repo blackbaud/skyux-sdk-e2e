@@ -166,9 +166,9 @@ describe('Host browser', () => {
 
     setupTest();
 
-    await verifyHostUrl('/foo', 'https://localhost:4200/');
-    await verifyHostUrl('foo', 'https://localhost:4200/');
-    await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/');
+    await verifyHostUrl('/foo', 'https://localhost:4200/foo');
+    await verifyHostUrl('foo', 'https://localhost:4200/foo');
+    await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/foo?leid=foobar');
   });
 
 });
