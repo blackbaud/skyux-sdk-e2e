@@ -1,3 +1,7 @@
+# 4.1.0 (2021-09-07)
+
+- Added support for the e2e client theme selector. [#41](https://github.com/blackbaud/skyux-sdk-e2e/pull/41)
+
 # 4.0.3 (2021-08-17)
 
 - Fixed the `SkyHostBrowser` utility to resolve URLs that do not include parameters. [#40](https://github.com/blackbaud/skyux-sdk-e2e/pull/40)
