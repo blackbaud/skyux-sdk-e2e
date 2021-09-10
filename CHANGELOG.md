@@ -1,3 +1,7 @@
+# 5.0.0-beta.1 (2021-09-10)
+
+- Fixed the NPM release.
+
 # 5.0.0-beta.0 (2021-09-10)
 
 ## Breaking changes
