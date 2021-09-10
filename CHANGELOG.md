@@ -1,3 +1,7 @@
+# 5.0.0-beta.0 (2021-09-10)
+
+- Initial beta release. []()
+
 # 4.1.0 (2021-09-07)
 
 - Added support for the e2e client theme selector. [#41](https://github.com/blackbaud/skyux-sdk-e2e/pull/41)
