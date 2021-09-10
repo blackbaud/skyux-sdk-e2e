@@ -64,6 +64,20 @@ describe('Host browser', () => {
     SkyHostBrowser['protractor'] = mockProtractor;
   }
 
+  it('should navigate to a URL', () => {
+    setupTest();
+    mockProtractor.browser.baseUrl = 'https://app.blackbaud.com/';
+    SkyHostBrowser.get('/foo');
+    expect(browserGetSpy).toHaveBeenCalledWith('https://app.blackbaud.com/foo', 0);
+  });
+
+  it('should navigate to a URL with a timeout', () => {
+    setupTest();
+    mockProtractor.browser.baseUrl = 'https://app.blackbaud.com/';
+    SkyHostBrowser.get('/foo', 500);
+    expect(browserGetSpy).toHaveBeenCalledWith('https://app.blackbaud.com/foo', 500);
+  });
+
   it('should move cursor off screen', async () => {
     setupTest();
     const spy = spyOn(mockBrowserActions, 'mouseMove').and.callThrough();
@@ -133,6 +147,16 @@ describe('Host browser', () => {
     await verifyHostUrl('/foo', 'https://localhost:4200/foo');
     await verifyHostUrl('foo', 'https://localhost:4200/foo');
     await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/foo?leid=foobar');
+  });
+
+  it('should handle baseUrl with params', async () => {
+    mockProtractor.browser.baseUrl = 'https://localhost:4200/?foo=bar';
+
+    setupTest();
+
+    await verifyHostUrl('/foo', 'https://localhost:4200/foo?foo=bar');
+    await verifyHostUrl('foo', 'https://localhost:4200/foo?foo=bar');
+    await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/foo?leid=foobar&foo=bar');
   });
 
 });
