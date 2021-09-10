@@ -3,6 +3,10 @@ import {
 } from 'protractor';
 
 import {
+  WebElementPromise
+} from 'selenium-webdriver';
+
+import {
   SkyHostBrowserBreakpoint
 } from './host-browser-breakpoint';
 
@@ -46,13 +50,13 @@ export abstract class SkyHostBrowser {
   }
 
   public static async moveCursorOffScreen(): Promise<void> {
-    const moveToElement = SkyHostBrowser.querySelector('body');
+    const moveToElement = await SkyHostBrowser.querySelector('body');
     await SkyHostBrowser.protractor.browser.actions()
       .mouseMove(moveToElement, { x: 0, y: 0 })
       .perform();
   }
 
-  public static querySelector(selector: string): any {
+  public static querySelector(selector: string): WebElementPromise {
     return SkyHostBrowser.protractor.element(
       SkyHostBrowser.protractor.by.css(selector)
     ).getWebElement();
@@ -96,7 +100,7 @@ export abstract class SkyHostBrowser {
   }
 
   public static async scrollTo(selector: string): Promise<void> {
-    const elem = SkyHostBrowser.querySelector(selector);
+    const elem = await SkyHostBrowser.querySelector(selector);
     await SkyHostBrowser.protractor.browser.executeScript('arguments[0].scrollIntoView();', elem);
   }
 
