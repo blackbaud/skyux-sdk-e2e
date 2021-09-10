@@ -12,17 +12,6 @@ import {
 
 export abstract class SkyHostBrowser {
 
-  /**
-   * Add backward compatibility with `@skyux-sdk/builder@^4`.
-   */
-  private static get hostUtils(): {
-    resolve: (...args: any[]) => string;
-  } {
-    try {
-      return require('@skyux-sdk/builder/utils/host-utils');
-    } catch (err) { }
-  };
-
   private static protractor: Ptor = require('protractor');
 
   public static async get(
@@ -31,17 +20,11 @@ export abstract class SkyHostBrowser {
   ): Promise<any> {
     const params = SkyHostBrowser.protractor.browser.params;
 
-    const destination = (this.hostUtils)
-      ? SkyHostBrowser.hostUtils.resolve(
-        url,
-        params.localUrl,
-        params.chunks,
-        params.skyPagesConfig
-      )
-      // If hostUtils cannot be imported, attempt to use the Host URL defined on the params object
+    const destination =
+      // Attempt to use the Host URL defined on the params object
       // (this value, if it exists, will have been set by one of SKY UX's build tools).
       // If all else fails, default to Protractor's base URL.
-      : SkyHostBrowser.resolveHostUrl(
+      SkyHostBrowser.resolveHostUrl(
         params.skyuxHostUrl || SkyHostBrowser.protractor.browser.baseUrl,
         url
       );

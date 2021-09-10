@@ -67,7 +67,6 @@ describe('Host browser', () => {
 
   function setupTest(): void {
     SkyHostBrowser['protractor'] = mockProtractor;
-    mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
   }
 
   it('should navigate to a URL', () => {
@@ -144,21 +143,6 @@ describe('Host browser', () => {
     expect(browserGetSpy).toHaveBeenCalledWith(expectedUrl, 0);
     browserGetSpy.calls.reset();
   }
-
-  it('should resolve Host URL if `@skyux-sdk/builder` is not installed', async () => {
-    mockHostUtils = undefined;
-
-    setupTest();
-
-    // Setup Protractor `params`.
-    mockProtractor.browser.params = {
-      skyuxHostUrl: 'https://app.blackbaud.com/?local=true&_cfg=abcdefg'
-    };
-
-    await verifyHostUrl('/foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
-    await verifyHostUrl('foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
-    await verifyHostUrl('/foo?leid=foobar', 'https://app.blackbaud.com/foo?leid=foobar&local=true&_cfg=abcdefg');
-  });
 
   it('should default to base URL if browser params unset', async () => {
     mockHostUtils = undefined;
