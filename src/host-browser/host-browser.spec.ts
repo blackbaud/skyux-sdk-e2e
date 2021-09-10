@@ -6,7 +6,6 @@ import {
 
 describe('Host browser', () => {
   let mockProtractor: any;
-  let mockHostUtils: any;
   let mockBrowserActions: any;
   let mockWindowActions: any;
   let browserGetSpy: jasmine.Spy;
@@ -48,14 +47,10 @@ describe('Host browser', () => {
       element(value: any): any {
         return {
           getWebElement(): any {
-            return value;
+            return Promise.resolve(value);
           }
         };
       }
-    };
-
-    mockHostUtils = {
-      resolve(): any {}
     };
 
     browserGetSpy = spyOn(mockProtractor.browser, 'get');
@@ -67,74 +62,73 @@ describe('Host browser', () => {
 
   function setupTest(): void {
     SkyHostBrowser['protractor'] = mockProtractor;
-    mock('@skyux-sdk/builder/utils/host-utils', mockHostUtils);
   }
 
   it('should navigate to a URL', () => {
     setupTest();
-    spyOn(mockHostUtils, 'resolve').and.returnValue('url');
+    mockProtractor.browser.baseUrl = 'https://app.blackbaud.com/';
     SkyHostBrowser.get('/foo');
-    expect(browserGetSpy).toHaveBeenCalledWith('url', 0);
+    expect(browserGetSpy).toHaveBeenCalledWith('https://app.blackbaud.com/foo', 0);
   });
 
   it('should navigate to a URL with a timeout', () => {
     setupTest();
-    spyOn(mockHostUtils, 'resolve').and.returnValue('url');
+    mockProtractor.browser.baseUrl = 'https://app.blackbaud.com/';
     SkyHostBrowser.get('/foo', 500);
-    expect(browserGetSpy).toHaveBeenCalledWith('url', 500);
+    expect(browserGetSpy).toHaveBeenCalledWith('https://app.blackbaud.com/foo', 500);
   });
 
-  it('should move cursor off screen', () => {
+  it('should move cursor off screen', async () => {
     setupTest();
     const spy = spyOn(mockBrowserActions, 'mouseMove').and.callThrough();
-    SkyHostBrowser.moveCursorOffScreen();
+    await SkyHostBrowser.moveCursorOffScreen();
     expect(spy).toHaveBeenCalledWith('body', { x: 0, y: 0 });
   });
 
-  it('should set window dimensions', () => {
+  it('should set window dimensions', async () => {
     setupTest();
     const spy = spyOn(mockWindowActions, 'setSize').and.callThrough();
-    SkyHostBrowser.setWindowDimensions(5, 6);
+    await SkyHostBrowser.setWindowDimensions(5, 6);
     expect(spy).toHaveBeenCalledWith(5, 6);
   });
 
-  it('should set window width for a breakpoint', () => {
+  it('should set window width for a breakpoint', async () => {
     setupTest();
     const spy = spyOn(mockWindowActions, 'setSize').and.callThrough();
 
-    SkyHostBrowser.setWindowBreakpoint('xs');
+    await SkyHostBrowser.setWindowBreakpoint('xs');
     expect(spy).toHaveBeenCalledWith(480, 800);
     spy.calls.reset();
 
-    SkyHostBrowser.setWindowBreakpoint('sm');
+    await SkyHostBrowser.setWindowBreakpoint('sm');
     expect(spy).toHaveBeenCalledWith(768, 800);
     spy.calls.reset();
 
-    SkyHostBrowser.setWindowBreakpoint('md');
+    await SkyHostBrowser.setWindowBreakpoint('md');
     expect(spy).toHaveBeenCalledWith(992, 800);
     spy.calls.reset();
 
-    SkyHostBrowser.setWindowBreakpoint('lg');
+    await SkyHostBrowser.setWindowBreakpoint('lg');
     expect(spy).toHaveBeenCalledWith(1200, 800);
     spy.calls.reset();
 
-    SkyHostBrowser.setWindowBreakpoint();
+    await SkyHostBrowser.setWindowBreakpoint();
     expect(spy).toHaveBeenCalledWith(1200, 800);
     spy.calls.reset();
   });
 
-  it('should scroll to element', () => {
+  it('should scroll to element', async () => {
     setupTest();
 
     spyOn(mockProtractor, 'element').and.returnValue({
-      getWebElement(): string {
-        return 'element';
+      getWebElement(): Promise<string> {
+        return Promise.resolve('element');
       }
     });
 
     const spy = spyOn(mockProtractor.browser, 'executeScript').and.callThrough();
 
-    SkyHostBrowser.scrollTo('body');
+    await SkyHostBrowser.scrollTo('body');
 
     expect(spy).toHaveBeenCalledWith('arguments[0].scrollIntoView();', 'element');
   });
@@ -145,23 +139,7 @@ describe('Host browser', () => {
     browserGetSpy.calls.reset();
   }
 
-  it('should resolve Host URL if `@skyux-sdk/builder` is not installed', async () => {
-    mockHostUtils = undefined;
-
-    setupTest();
-
-    // Setup Protractor `params`.
-    mockProtractor.browser.params = {
-      skyuxHostUrl: 'https://app.blackbaud.com/?local=true&_cfg=abcdefg'
-    };
-
-    await verifyHostUrl('/foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
-    await verifyHostUrl('foo', 'https://app.blackbaud.com/foo?local=true&_cfg=abcdefg');
-    await verifyHostUrl('/foo?leid=foobar', 'https://app.blackbaud.com/foo?leid=foobar&local=true&_cfg=abcdefg');
-  });
-
   it('should default to base URL if browser params unset', async () => {
-    mockHostUtils = undefined;
     mockProtractor.browser.baseUrl = 'https://localhost:4200/';
 
     setupTest();
@@ -169,6 +147,16 @@ describe('Host browser', () => {
     await verifyHostUrl('/foo', 'https://localhost:4200/foo');
     await verifyHostUrl('foo', 'https://localhost:4200/foo');
     await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/foo?leid=foobar');
+  });
+
+  it('should handle baseUrl with params', async () => {
+    mockProtractor.browser.baseUrl = 'https://localhost:4200/?foo=bar';
+
+    setupTest();
+
+    await verifyHostUrl('/foo', 'https://localhost:4200/foo?foo=bar');
+    await verifyHostUrl('foo', 'https://localhost:4200/foo?foo=bar');
+    await verifyHostUrl('/foo?leid=foobar', 'https://localhost:4200/foo?leid=foobar&foo=bar');
   });
 
 });

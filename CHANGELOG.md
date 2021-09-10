@@ -1,3 +1,10 @@
+# 5.0.0-beta.0 (2021-09-10)
+
+## Breaking changes
+
+- Fixed the `SkyHostBrowser.moveCursorOffScreen` and `SkyHostBrowser.scrollTo` methods to properly handle asynchronous calls. This is a breaking change because screenshots might be slightly different when waiting for the scroll behavior to complete. [#43](https://github.com/blackbaud/skyux-sdk-e2e/pull/43)
+- Dropped support for `@skyux-sdk/builder`. [#43](https://github.com/blackbaud/skyux-sdk-e2e/pull/43)
+
 # 4.1.0 (2021-09-07)
 
 - Added support for the e2e client theme selector. [#41](https://github.com/blackbaud/skyux-sdk-e2e/pull/41)

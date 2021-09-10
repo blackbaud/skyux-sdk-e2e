@@ -3,21 +3,14 @@ import {
 } from 'protractor';
 
 import {
+  WebElementPromise
+} from 'selenium-webdriver';
+
+import {
   SkyHostBrowserBreakpoint
 } from './host-browser-breakpoint';
 
 export abstract class SkyHostBrowser {
-
-  /**
-   * Add backward compatibility with `@skyux-sdk/builder@^4`.
-   */
-  private static get hostUtils(): {
-    resolve: (...args: any[]) => string;
-  } {
-    try {
-      return require('@skyux-sdk/builder/utils/host-utils');
-    } catch (err) { }
-  };
 
   private static protractor: Ptor = require('protractor');
 
@@ -27,17 +20,11 @@ export abstract class SkyHostBrowser {
   ): Promise<any> {
     const params = SkyHostBrowser.protractor.browser.params;
 
-    const destination = (this.hostUtils)
-      ? SkyHostBrowser.hostUtils.resolve(
-        url,
-        params.localUrl,
-        params.chunks,
-        params.skyPagesConfig
-      )
-      // If hostUtils cannot be imported, attempt to use the Host URL defined on the params object
+    const destination =
+      // Attempt to use the Host URL defined on the params object
       // (this value, if it exists, will have been set by one of SKY UX's build tools).
       // If all else fails, default to Protractor's base URL.
-      : SkyHostBrowser.resolveHostUrl(
+      SkyHostBrowser.resolveHostUrl(
         params.skyuxHostUrl || SkyHostBrowser.protractor.browser.baseUrl,
         url
       );
@@ -46,13 +33,13 @@ export abstract class SkyHostBrowser {
   }
 
   public static async moveCursorOffScreen(): Promise<void> {
-    const moveToElement = SkyHostBrowser.querySelector('body');
+    const moveToElement = await SkyHostBrowser.querySelector('body');
     await SkyHostBrowser.protractor.browser.actions()
       .mouseMove(moveToElement, { x: 0, y: 0 })
       .perform();
   }
 
-  public static querySelector(selector: string): any {
+  public static querySelector(selector: string): WebElementPromise {
     return SkyHostBrowser.protractor.element(
       SkyHostBrowser.protractor.by.css(selector)
     ).getWebElement();
@@ -96,7 +83,7 @@ export abstract class SkyHostBrowser {
   }
 
   public static async scrollTo(selector: string): Promise<void> {
-    const elem = SkyHostBrowser.querySelector(selector);
+    const elem = await SkyHostBrowser.querySelector(selector);
     await SkyHostBrowser.protractor.browser.executeScript('arguments[0].scrollIntoView();', elem);
   }
 
